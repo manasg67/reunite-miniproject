@@ -21,7 +21,7 @@ const Profile = () => {
   const [familyRelation, setFamilyRelation] = useState("")
 
   const fetchFamilyMembers = async (familyId) => {
-    console.log('Fetching family members for family ID:', familyId) // Debug log
+    console.log('Fetching family members for family ID:', familyId)
     const accessToken = localStorage.getItem('accessToken')
     
     if (!accessToken) {
@@ -43,8 +43,10 @@ const Profile = () => {
       }
 
       const data = await response.json()
-      console.log('Family members data:', data) // Debug log
+      console.log('Family members data:', data)
       setFamilyMembers(data)
+      // Store family ID in localStorage
+      localStorage.setItem('familyId', familyId)
     } catch (err) {
       console.error('Error fetching family members:', err)
     }
@@ -53,6 +55,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       const accessToken = localStorage.getItem('accessToken')
+      const storedFamilyId = localStorage.getItem('familyId')
       
       if (!accessToken) {
         navigate('/login')
@@ -75,9 +78,10 @@ const Profile = () => {
         const data = await response.json()
         setUser(data)
         
-        // If user belongs to a family, fetch family members
-        if (data.family_id) {
-          await fetchFamilyMembers(data.family_id)
+        // Try to fetch family members using stored family ID or from user data
+        const familyId = data.family_id || storedFamilyId
+        if (familyId) {
+          await fetchFamilyMembers(familyId)
         }
         
         setLoading(false)
@@ -142,12 +146,17 @@ const Profile = () => {
       const data = await response.json()
       console.log('Family created:', data)
       setFamilyPasskey(data.passkey)
+      
+      // Store the family ID
+      if (data.id) {
+        localStorage.setItem('familyId', data.id)
+        await fetchFamilyMembers(data.id)
+      }
+      
       setIsCreateModalOpen(false)
-      // Clear the form
       setFamilyName("")
     } catch (err) {
       console.error('Error creating family:', err)
-      // You might want to show this error to the user
     }
   }
   
@@ -186,15 +195,16 @@ const Profile = () => {
       setFamilyCode("")
       setFamilyRelation("")
 
-      // Extract family ID from the response and fetch family members
+      // Extract family ID and store it
       if (data.family && data.family.id) {
+        localStorage.setItem('familyId', data.family.id)
         await fetchFamilyMembers(data.family.id)
       }
 
       // Update user data in state
       setUser(prevUser => ({
         ...prevUser,
-        family_id: data.family.id // Store family ID in user data
+        family_id: data.family.id
       }))
 
     } catch (err) {
