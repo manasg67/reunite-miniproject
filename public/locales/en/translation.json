@@ -1,0 +1,47 @@
+{
+  "My Website": "My Website",
+  "Home": "Home",
+  "About": "About",
+  "Contact": "Contact",
+  "Welcome": "Welcome to my website",
+  "Switch_Language": "हिंदी में देखें",
+  
+  "login": {
+    "title": "ReUnite",
+    "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. In autem ipsa, nulla laboriosam dolores, repellendus perferendis libero suscipit nam temporibus molestiae",
+    "signin_access": "Sign in to access your account",
+    "email": "Email Address",
+    "password": "Password",
+    "forgot_password": "Forgot password?",
+    "signin_button": "Sign in",
+    "no_account": "Don't have an account yet?",
+    "sign_up": "Sign up"
+  },
+
+  "register": {
+    "title": "Get your free account now.",
+    "subtitle": "Let's get you all set up so you can verify your personal account and begin setting up your profile.",
+    "account_type": "Select type of account",
+    "client": "client",
+    "worker": "worker",
+    "first_name": "First Name",
+    "last_name": "Last name",
+    "phone": "Phone number",
+    "email": "Email address",
+    "password": "Password",
+    "confirm_password": "Confirm password",
+    "signup_button": "Sign Up",
+    "full_name": "Full Name",
+    "gender": "Gender",
+    "select_gender": "Select gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "address": "Address",
+    "enter_address": "Enter your address",
+    "aadhar_photo": "Aadhar Card Photo",
+    "profile_photo": "Profile Photo",
+    "get_started": "Get your free account now.",
+    "setup_description": "Let's get you all set up so you can verify your personal account and begin setting up your profile."
+  }
+}
