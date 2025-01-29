@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search, Users, Shield, Clock, AlertTriangle, Camera, FileText, Fingerprint, Heart } from "lucide-react"
 import Banner from "../components/banner"
-import SuccessStories from "@/components/SuccessStories"
+import SuccessStories from "../components/SuccessStories"
 
 export default function LandingPage() {
   return (

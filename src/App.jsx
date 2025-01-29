@@ -12,7 +12,7 @@ function App() {
   return (
     <>
 
-      <div className='relative '>
+      <div className='relative bg-gradient-to-b from-blue-100 to-white'>
         <Header />
         <main className="w-full bg-gradient-to-b from-blue-100 to-white text-black">
           <Outlet />
