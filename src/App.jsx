@@ -9,15 +9,13 @@ function App() {
   return (
     <>
 
-      <div className=''>
+      <div className='relative'>
         <Header />
         <main className="w-full">
           <Outlet />
         </main>
       </div>
-        {/* <h1 className="text-3xl text-red-500 font-bold underline">
-      Hello world!
-    </h1> */}
+        
       <AppRoutes />
       {/* <Footer /> */}
     </>
