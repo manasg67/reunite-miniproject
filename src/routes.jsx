@@ -5,6 +5,7 @@ import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import AdminDashboard from './pages/AdminDashboard';
 import MissingPersonDetails from './pages/MissingPersonDetails';
+import CaseManagement from './pages/CaseManagement';
 
 const AppRoutes = () => (
   // <Router>
@@ -14,6 +15,7 @@ const AppRoutes = () => (
       <Route path="/register" element={<Register />} />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/missing-person" element={<MissingPersonDetails />} />
+      <Route path="/case-management" element={<CaseManagement />} />
     </Routes>
   // </Router>
 );
