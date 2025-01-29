@@ -15,6 +15,8 @@ import SearchByFace from "./pages/search/SearchByFace";
 
 import PublicForum from './pages/PublicForum';
 import ReportMissing from './pages/user/ReportMissing';
+import MissingPersonsMap from './pages/MissingPersonMap';
+// import MissingPersonMap from './pages/MissingPersonMap';
 
 const AppRoutes = () => (
   // <Router>
@@ -33,6 +35,7 @@ const AppRoutes = () => (
       <Route path="/search/by-aadhaar" element={<SearchByAadhaar />} />
       <Route path="/search/by-face" element={<SearchByFace />} />
       <Route path="/report-missing" element={<ReportMissing />} />
+      <Route path="/missing-person-map" element={<MissingPersonsMap />} />
     </Routes>
   // </Router>
 );
