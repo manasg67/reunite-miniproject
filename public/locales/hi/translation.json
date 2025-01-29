@@ -15,7 +15,13 @@
     "forgot_password": "पासवर्ड भूल गए?",
     "signin_button": "साइन इन करें",
     "no_account": "अभी तक कोई खाता नहीं है?",
-    "sign_up": "साइन अप करें"
+    "sign_up": "साइन अप करें",
+    "signing_in": "साइन इन हो रहा है...",
+    "success": "सफलतापूर्वक लॉग इन हो गया!",
+    "error": "लॉगिन विफल। कृपया पुनः प्रयास करें।",
+    "username": "यूजर आईडी",
+    "username_placeholder": "अपनी यूजर आईडी दर्ज करें",
+    "password_placeholder": "अपना पासवर्ड दर्ज करें"
   },
 
   "register": {
@@ -319,7 +325,8 @@
       "dob": "जन्म तिथि",
       "documents": {
         "aadhaar": "आधार फोटो",
-        "person": "लापता व्यक्ति का फोटो"
+        "person": "लापता व्यक्ति का फोटो",
+        "upload_prompt": "अपलोड करने के लिए क्लिक करें या खींचें और छोड़ें"
       },
       "missing_details": {
         "date": "लापता होने की तिथि",
@@ -340,7 +347,20 @@
         "missing_date_required": "लापता होने की तिथि आवश्यक है।",
         "time_invalid": "अमान्य समय प्रारूप।",
         "location_required": "आखिरी स्थान आवश्यक है।"
+      },
+      "physical_details": {
+        "height_placeholder": "ऊंचाई सेमी में दर्ज करें",
+        "weight_placeholder": "वजन किग्रा में दर्ज करें"
       }
+    },
+    "subtitle": "कृपया लापता व्यक्ति को खोजने में मदद के लिए सटीक जानकारी प्रदान करें",
+    "form_title": "लापता व्यक्ति का विवरण",
+    "form_description": "लापता व्यक्ति के बारे में सभी आवश्यक जानकारी भरें",
+    "sections": {
+      "personal_info": "व्यक्तिगत जानकारी",
+      "physical_details": "शारीरिक विवरण",
+      "documents": "आवश्यक दस्तावेज़",
+      "missing_details": "लापता होने का विवरण"
     }
   },
 
