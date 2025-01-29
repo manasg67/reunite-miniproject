@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 import QRCode from "qrcode"
 import { Button } from "@/components/ui/button"
 import { Page, Text, View, Image, Document, StyleSheet, PDFDownloadLink } from "@react-pdf/renderer"
-import PosterPDF from "@/components/Poster"
+import PosterPDF from "@/components/PosterPDF"
 
 const missingPersons = [
   {
@@ -12,14 +12,22 @@ const missingPersons = [
     name: "John Doe",
     photo: "/images/missing-example.jpg",
     contactNo: "123-456-7890",
+    age: "25",
+    height: "5'10\"",
+    weight: "160 lbs",
     lastSeen: "2023-05-15",
+    missingSince: "2023-05-15",
   },
   {
     id: "2",
     name: "Jane Smith",
     photo: "/images/missing-example.jpg",
     contactNo: "987-654-3210",
+    age: "25",
+    height: "5'10\"",
+    weight: "160 lbs",
     lastSeen: "2023-05-20",
+    missingSince: "2023-05-15",
   },
 ]
 
@@ -38,13 +46,13 @@ export default function CreatePosterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+    <div className="min-h-screen  bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
       {/* 🖼️ Poster Preview */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden p-6"
+        className="max-w-md mx-auto bg-white rounded-lg shadow-lg relative top-20 overflow-hidden p-6"
       >
         <motion.img
           src={person.photo}
@@ -73,7 +81,7 @@ export default function CreatePosterPage() {
         <PDFDownloadLink
           document={<PosterPDF person={person} />}
           fileName={`${person.name}_missing_poster.pdf`}
-          className="px-6 py-3 bg-blue-600 text-white font-semibold rounded shadow-md hover:bg-blue-700 transition"
+          className="px-6 py-3 relative top-20 bg-blue-600 text-white font-semibold rounded shadow-md hover:bg-blue-700 transition"
         >
           {({ loading }) => (loading ? "Generating PDF..." : "Download Poster PDF")}
         </PDFDownloadLink>

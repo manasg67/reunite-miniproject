@@ -239,5 +239,58 @@
       }
     },
     "copyright": "© {year} Reunite. All rights reserved by Cloudflare."
+  },
+
+  "search": {
+    "by_name": {
+      "page_title": "Search Missing Person by Name",
+      "input_placeholder": "Enter the person's name",
+      "search_button": "Search",
+      "help_text": "Enter the full name of the person you're looking for. You can also try partial names or nicknames.",
+      "description": "Enter the full name of the missing person to start your search."
+    },
+    "by_aadhaar": {
+      "page_title": "Search Missing Person by Aadhaar",
+      "input_placeholder": "Enter 12-digit Aadhaar number",
+      "input_help": "Enter the Aadhaar number without spaces or dashes",
+      "search_button": "Search",
+      "privacy_notice": "Your search is secure and confidential. Aadhaar details are encrypted and only used for verification purposes.",
+      "validation_error": "Please enter a valid 12-digit Aadhaar number",
+      "search_error": "An error occurred while searching. Please try again."
+    },
+    "results": {
+      "age": "Age",
+      "last_seen": "Last Seen",
+      "location": "Location",
+      "view_details": "View Details",
+      "basic_info": "Basic Information",
+      "aadhaar": "Aadhaar Number",
+      "additional_info": "Additional Information",
+      "height": "Height",
+      "weight": "Weight",
+      "identifying_marks": "Identifying Marks",
+      "last_seen_wearing": "Last Seen Wearing",
+      "contact_family": "Contact Family"
+    },
+    "no_results": "No matching records found",
+    "by_face": {
+      "page_title": "Search Missing Person by Face Photo",
+      "upload_notice": "Upload a clear, recent face photo for the most accurate results. We use advanced facial recognition technology to find potential matches.",
+      "upload_button": "Upload a photo",
+      "remove_photo": "Remove",
+      "file_requirements": "PNG, JPG up to 5MB",
+      "gender_label": "Select Gender (Optional)",
+      "select_gender": "Select gender",
+      "gender_male": "Male",
+      "gender_female": "Female",
+      "gender_other": "Other",
+      "search_button": "Search",
+      "results_title": "Potential Matches",
+      "match": "Match",
+      "file_size_error": "Photo size must be less than 5MB",
+      "file_type_error": "Please upload a valid image file",
+      "photo_required": "Please upload a photo to search",
+      "search_error": "An error occurred while searching. Please try again."
+    }
   }
 }
