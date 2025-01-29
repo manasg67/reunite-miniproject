@@ -42,6 +42,74 @@
     "aadhar_photo": "Aadhar Card Photo",
     "profile_photo": "Profile Photo",
     "get_started": "Get your free account now.",
-    "setup_description": "Let's get you all set up so you can verify your personal account and begin setting up your profile."
+    "setup_description": "Let's get you all set up so you can verify your personal account and begin setting up your profile.",
+    "validation": {
+      "name_min": "Full name must be at least 2 characters.",
+      "gender_required": "Please select a gender.",
+      "email_invalid": "Please enter a valid email address.",
+      "phone_min": "Phone number must be at least 10 digits.",
+      "address_min": "Address must be at least 5 characters."
+    },
+    "placeholders": {
+      "name": "John Doe",
+      "email": "johndoe@example.com",
+      "phone": "123-456-7890",
+      "address": "Enter your address"
+    }
+  },
+
+  "admin_dashboard": {
+    "filter_title": "Filter Missing Persons",
+    "filter_by_name": "Filter by name",
+    "filter_by_case": "Filter by case number",
+    "filter_by_area": "Filter by area",
+    "apply_filters": "Apply Filters",
+    "view_details": "View Details",
+    "no_records": "No matching records found"
+  },
+
+  "case_management": {
+    "title": "Case Management",
+    "subtitle": "Track and manage missing person cases efficiently",
+    "filter_title": "Filter Cases",
+    "filter_by_name": "Filter by name",
+    "apply_filters": "Apply Filters",
+    "all_statuses": "All Statuses",
+    "status": {
+      "open": "Open",
+      "closed": "Closed",
+      "under_investigation": "Under Investigation"
+    },
+    "table": {
+      "case_number": "Case Number",
+      "name": "Name",
+      "status": "Status",
+      "last_updated": "Last Updated",
+      "assigned_to": "Assigned To",
+      "actions": "Actions"
+    },
+    "edit": {
+      "title": "Edit Case",
+      "subtitle": "Update case details here",
+      "name": "Name",
+      "status": "Status",
+      "assigned_to": "Assigned To",
+      "save": "Save Changes"
+    }
+  },
+
+  "missing_person_details": {
+    "case_number": "Case #",
+    "age": "Age",
+    "last_seen": "Last seen",
+    "date": "Date",
+    "family_members": "Family Members",
+    "contact": "Contact",
+    "contact_info": "Contact information for",
+    "report_found": "Report Person Found",
+    "thank_you": "Thank You!",
+    "report_received": "Your report has been received",
+    "important_info": "Important Information",
+    "contact_message": "You will be contacted by their family member shortly, or you can contact them using the information provided above."
   }
 }
