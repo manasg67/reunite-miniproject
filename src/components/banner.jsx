@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
 
 const Banner = () => {
   const { t } = useTranslation();
@@ -100,10 +101,14 @@ const Banner = () => {
                     {features[currentSlide].description}
                   </p>
                 </div>
-                <button className="group flex items-center gap-2 w-fit rounded-full bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:from-blue-600 hover:to-blue-700 hover:shadow-lg hover:-translate-y-1">
-                  {features[currentSlide].buttonText}
-                  <ArrowRight className="h-5 w-5 transform transition-transform group-hover:translate-x-1" />
-                </button>
+                <Button 
+                  className="mt-8 w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    {t('search.results.contact_family')}
+                    <ArrowRight className="h-5 w-5 transform transition-transform group-hover:translate-x-1" />
+                  </div>
+                </Button>
               </div>
             </div>
           </div>

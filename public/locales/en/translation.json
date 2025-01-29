@@ -292,5 +292,65 @@
       "photo_required": "Please upload a photo to search",
       "search_error": "An error occurred while searching. Please try again."
     }
+  },
+
+  "report_missing": {
+    "title": "Report Missing Person",
+    "family_member": {
+      "toggle": "Family Member",
+      "select": "Select Family Member"
+    },
+    "form": {
+      "name": "Name",
+      "surname": "Surname",
+      "gender": {
+        "label": "Gender",
+        "select": "Select gender",
+        "male": "Male",
+        "female": "Female",
+        "other": "Other"
+      },
+      "height": "Height (cm)",
+      "weight": "Weight (kg)",
+      "blood_group": {
+        "label": "Blood Group",
+        "select": "Select blood group"
+      },
+      "dob": "Date of Birth",
+      "documents": {
+        "aadhaar": "Aadhaar Photo",
+        "person": "Missing Person's Photo"
+      },
+      "missing_details": {
+        "date": "Missing Date",
+        "time": "Missing Time",
+        "location": "Last Known Location"
+      },
+      "submit": "Submit Report",
+      "validation": {
+        "name_min": "Name must be at least 2 characters.",
+        "surname_min": "Surname must be at least 2 characters.",
+        "gender_required": "Please select a gender.",
+        "height_range": "Height must be between 50cm and 300cm",
+        "weight_range": "Weight must be between 1kg and 500kg",
+        "aadhaar_required": "Aadhaar photo is required.",
+        "photo_required": "Missing person's photo is required.",
+        "dob_required": "Date of birth is required.",
+        "blood_group_required": "Please select a blood group.",
+        "missing_date_required": "Missing date is required.",
+        "time_invalid": "Invalid time format.",
+        "location_required": "Last known location is required."
+      }
+    }
+  },
+
+  "my_complains": {
+    "title": "My Missing Person Reports",
+    "card": {
+      "contact": "Contact",
+      "last_seen": "Last Seen",
+      "view_details": "See more info",
+      "no_reports": "You haven't filed any missing person reports yet"
+    }
   }
 }
