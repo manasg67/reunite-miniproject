@@ -9,9 +9,9 @@ function App() {
   return (
     <>
 
-      <div className='relative'>
+      <div className='relative '>
         <Header />
-        <main className="w-full">
+        <main className="w-full bg-gradient-to-b from-blue-100 to-white text-black">
           <Outlet />
         </main>
       </div>
