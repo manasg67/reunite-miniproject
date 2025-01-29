@@ -30,10 +30,16 @@ export default function PosterPDF({ person }) {
       textAlign: "center",
       padding: "0 20px",
     },
+    contentContainer: {
+      flexDirection: "row",
+      padding: "0 40px",
+    },
+    mainContent: {
+      flex: 1,
+    },
     imageContainer: {
       position: "relative",
       alignItems: "center",
-      padding: "0 40px",
     },
     personImage: {
       width: "100%",
@@ -45,7 +51,7 @@ export default function PosterPDF({ person }) {
       bottom: 0,
       backgroundColor: "#FF0000",
       padding: "10px 40px",
-      width: "80%",
+      width: "100%",
     },
     name: {
       fontSize: 36,
@@ -54,9 +60,9 @@ export default function PosterPDF({ person }) {
       fontWeight: "bold",
     },
     detailsSection: {
-      display: "flex",
       flexDirection: "row",
-      padding: "20px 40px",
+      justifyContent: "space-between",
+      padding: "20px 0",
       alignItems: "center",
     },
     detailText: {
@@ -104,10 +110,22 @@ export default function PosterPDF({ person }) {
     },
     qrSection: {
       position: "absolute",
-      right: 20,
-      bottom: 200,
+      top: 20,
+      right: 40,
       width: 100,
       height: 100,
+   
+    },
+    qrText: {
+      fontSize: 9,
+      color: "red",
+      textAlign: "center",
+      marginTop: 5,
+    },
+    qrImage: {
+      width: 100,
+      height: 100,
+      border: "1px solid black",
     },
   })
 
@@ -134,30 +152,37 @@ export default function PosterPDF({ person }) {
           <View style={styles.headerBar} />
         </View>
 
-        <View style={styles.imageContainer}>
-          <Image src={person.photo || "/placeholder.svg"} style={styles.personImage} />
-          <View style={styles.nameOverlay}>
-            <Text style={styles.name}>{person.name.toUpperCase()}</Text>
+        <View style={styles.contentContainer}>
+          <View style={styles.mainContent}>
+            <View style={styles.imageContainer}>
+              <Image src={person.photo || "/placeholder.svg"} style={styles.personImage} />
+              <View style={styles.nameOverlay}>
+                <Text style={styles.name}>{person.name.toUpperCase()}</Text>
+              </View>
+            </View>
+
+            <View style={styles.detailsSection}>
+              <Text style={styles.detailText}>Age: {person.age}</Text>
+              <Text style={styles.detailText}>Height: {person.height}</Text>
+              <Text style={styles.detailText}>Weight: {person.weight}</Text>
+            </View>
+
+            <View style={styles.blackBar}>
+              <Text style={styles.missingSinceText}>MISSING SINCE {person.missingSince}</Text>
+            </View>
+
+            <Text style={styles.lastSeenText}>{person.lastSeenWearing}</Text>
           </View>
+
+          {qrCode && (
+            <>
+            <View style={styles.qrSection} >
+              <Image style={styles.qrImage} src={qrCode || "/placeholder.svg"} />
+              <Text style={styles.qrText}>If any info found, scan this QR code to report</Text>
+            </View>
+            </>
+          )}
         </View>
-
-        <View style={styles.detailsSection}>
-          <Text style={styles.detailText}>Age: {person.age}</Text>
-          <Text style={styles.detailText}>Height: {person.height}</Text>
-          <Text style={styles.detailText}>Weight: {person.weight}</Text>
-        </View>
-
-        <View style={styles.blackBar}>
-          <Text style={styles.missingSinceText}>MISSING SINCE {person.missingSince}</Text>
-        </View>
-
-        <Text style={styles.lastSeenText}>{person.lastSeenWearing}</Text>
-
-        {qrCode && (
-          <View style={styles.qrSection}>
-            <Image src={qrCode || "/placeholder.svg"} />
-          </View>
-        )}
 
         <View style={styles.footer}>
           <Text style={styles.pleaseHelp}>Please Help</Text>
