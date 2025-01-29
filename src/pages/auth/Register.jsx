@@ -1,16 +1,16 @@
-"use client"
 
 import React, { useState } from "react"
+import { useTranslation } from 'react-i18next';
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Button } from "../../components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card"
+import { Input } from "../../components/ui/input"
+import { Label } from "../../components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
+import { Textarea } from "../../components/ui/textarea"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form"
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
@@ -33,6 +33,8 @@ const formSchema = z.object({
 })
 
 const Register = () => {
+  const { t } = useTranslation();
+
   const [aadharPreview, setAadharPreview] = useState(null)
   const [profilePreview, setProfilePreview] = useState(null)
 
@@ -59,21 +61,21 @@ const Register = () => {
           <Card className="w-full bg-opacity-90 bg-gray-100 top-10 relative border border-black">
             <CardHeader>
               <CardTitle className="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
-                Get your free account now.
+                {t('register.get_started')}
               </CardTitle>
               <CardDescription className="mt-4 text-gray-500 dark:text-gray-400">
-                Let's get you all set up so you can verify your personal account and begin setting up your profile.
+                {t('register.setup_description')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 ">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   <FormField
                     control={form.control}
                     name="fullName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Full Name</FormLabel>
+                        <FormLabel>{t('register.full_name')}</FormLabel>
                         <FormControl>
                           <Input placeholder="John Doe" {...field} />
                         </FormControl>
@@ -86,17 +88,17 @@ const Register = () => {
                     name="gender"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Gender</FormLabel>
+                        <FormLabel>{t('register.gender')}</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select gender" />
+                              <SelectValue placeholder={t('register.select_gender')} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="male">Male</SelectItem>
-                            <SelectItem value="female">Female</SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
+                            <SelectItem value="male">{t('register.male')}</SelectItem>
+                            <SelectItem value="female">{t('register.female')}</SelectItem>
+                            <SelectItem value="other">{t('register.other')}</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -108,7 +110,7 @@ const Register = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>{t('register.email')}</FormLabel>
                         <FormControl>
                           <Input type="email" placeholder="johndoe@example.com" {...field} />
                         </FormControl>
@@ -121,7 +123,7 @@ const Register = () => {
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Phone Number</FormLabel>
+                        <FormLabel>{t('register.phone')}</FormLabel>
                         <FormControl>
                           <Input type="tel" placeholder="123-456-7890" {...field} />
                         </FormControl>
@@ -134,9 +136,9 @@ const Register = () => {
                     name="address"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Address</FormLabel>
+                        <FormLabel>{t('register.address')}</FormLabel>
                         <FormControl>
-                          <Textarea placeholder="Enter your address" {...field} />
+                          <Textarea placeholder={t('register.enter_address')} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -152,7 +154,7 @@ const Register = () => {
                         name="aadharPhoto"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Aadhar Card Photo</FormLabel>
+                            <FormLabel>{t('register.aadhar_photo')}</FormLabel>
                             <FormControl>
                               <Input type="file" accept="image/*" onChange={(e) => {
                                 field.onChange(e.target.files[0])
@@ -173,7 +175,7 @@ const Register = () => {
                         name="profilePhoto"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Profile Photo</FormLabel>
+                            <FormLabel>{t('register.profile_photo')}</FormLabel>
                             <FormControl>
                               <Input type="file" accept="image/*" onChange={(e) => {
                                 field.onChange(e.target.files[0])
@@ -187,7 +189,7 @@ const Register = () => {
                     </div>
                   </div>
                   <Button type="submit" className="w-full bg-gray-700 rounded text-white">
-                    Sign Up
+                    {t('register.signup_button')}
                   </Button>
                 </form>
               </Form>
