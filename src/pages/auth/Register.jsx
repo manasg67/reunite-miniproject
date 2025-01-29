@@ -1,5 +1,4 @@
-
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useTranslation } from 'react-i18next';
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -11,47 +10,150 @@ import { Label } from "../../components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
 import { Textarea } from "../../components/ui/textarea"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form"
+import { useNavigate } from 'react-router-dom';
 
 const formSchema = z.object({
-  fullName: z.string().min(2, {
-    message: "Full name must be at least 2 characters.",
-  }),
-  gender: z.string({
-    required_error: "Please select a gender.",
+  username: z.string()
+    .min(3, { message: "Username must be at least 3 characters." })
+    .regex(/^[\w.@+-]+$/, {
+      message: "Username may contain only letters, numbers, and @/./+/-/_ characters.",
+    }),
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
   }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  phone: z.string().min(10, {
+  first_name: z.string().min(2, {
+    message: "First name must be at least 2 characters.",
+  }),
+  middle_name: z.string().optional(),
+  last_name: z.string().min(2, {
+    message: "Last name must be at least 2 characters.",
+  }),
+  phone_number: z.string().min(10, {
     message: "Phone number must be at least 10 digits.",
   }),
   address: z.string().min(5, {
     message: "Address must be at least 5 characters.",
   }),
-  aadharPhoto: z.any(),
-  profilePhoto: z.any(),
+  state: z.string().min(2, {
+    message: "State is required.",
+  }),
+  city: z.string().min(2, {
+    message: "City is required.",
+  }),
+  pincode: z.string().min(6, {
+    message: "Valid pincode is required.",
+  }),
+  dob: z.string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, {
+      message: "Date must be in YYYY-MM-DD format.",
+    }),
+  gender: z.enum(["M", "F", "O"], {
+    message: "Please select a valid gender.",
+  }),
+  role: z.string({
+    required_error: "Please select a role.",
+  }),
+  latitude: z.string()
+    .transform((val) => Number(val).toFixed(6))
+    .pipe(z.string()),
+  longitude: z.string()
+    .transform((val) => Number(val).toFixed(6))
+    .pipe(z.string()),
+  aadhaar_image: z.any(),
+  profile_picture: z.any(),
 })
 
 const Register = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const [aadharPreview, setAadharPreview] = useState(null)
   const [profilePreview, setProfilePreview] = useState(null)
+  const [location, setLocation] = useState({ latitude: "", longitude: "" });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: "",
-      gender: "",
+      username: "",
+      password: "",
       email: "",
-      phone: "",
+      first_name: "",
+      middle_name: "",
+      last_name: "",
+      phone_number: "",
       address: "",
+      state: "",
+      city: "",
+      pincode: "",
+      dob: "",
+      gender: "",
+      role: "",
+      latitude: "",
+      longitude: "",
     },
   })
 
-  function onSubmit(values) {
-    // This is where you would typically handle form submission
-    console.log(values)
+  const getLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const latitude = position.coords.latitude.toFixed(6);
+        const longitude = position.coords.longitude.toFixed(6);
+        setLocation({ latitude, longitude });
+        form.setValue('latitude', latitude);
+        form.setValue('longitude', longitude);
+      });
+    }
+  };
+
+  async function onSubmit(values) {
+    const formData = new FormData();
+    
+    // Only append the required fields
+    const requiredFields = [
+      'username', 'password', 'email', 'first_name', 'last_name',
+      'phone_number', 'role', 'middle_name', 'address', 'state',
+      'pincode', 'dob', 'gender', 'latitude', 'longitude', 'city'
+    ];
+
+    requiredFields.forEach(field => {
+      formData.append(field, values[field]);
+    });
+
+    // Handle file uploads
+    if (values.aadhaar_image) {
+      formData.append('aadhaar_image', values.aadhaar_image);
+    }
+    if (values.profile_picture) {
+      formData.append('profile_picture', values.profile_picture);
+    }
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/accounts/users/register_with_aadhaar/', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        console.log('Registration successful:', data);
+        // Store the access token
+        if (data.tokens && data.tokens.access) {
+          localStorage.setItem('accessToken', data.tokens.access);
+          localStorage.setItem('refreshToken', data.tokens.refresh);
+          navigate('/');
+        } else {
+          console.error('No access token received');
+        }
+      } else {
+        console.error('Registration failed:', data);
+      }
+    } catch (error) {
+      console.error('Error during registration:', error);
+    }
   }
 
   return (
@@ -72,12 +174,12 @@ const Register = () => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   <FormField
                     control={form.control}
-                    name="fullName"
+                    name="username"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t('register.full_name')}</FormLabel>
+                        <FormLabel>{t('register.username')}</FormLabel>
                         <FormControl>
-                          <Input placeholder="John Doe" {...field} />
+                          <Input placeholder="johndoe123" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -85,26 +187,58 @@ const Register = () => {
                   />
                   <FormField
                     control={form.control}
-                    name="gender"
+                    name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t('register.gender')}</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder={t('register.select_gender')} />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="male">{t('register.male')}</SelectItem>
-                            <SelectItem value="female">{t('register.female')}</SelectItem>
-                            <SelectItem value="other">{t('register.other')}</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <FormLabel>{t('register.password')}</FormLabel>
+                        <FormControl>
+                          <Input type="password" {...field} />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+                  <div className="flex gap-4">
+                    <FormField
+                      control={form.control}
+                      name="first_name"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>{t('register.first_name')}</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="middle_name"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>{t('register.middle_name')}</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="last_name"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>{t('register.last_name')}</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <FormField
                     control={form.control}
                     name="email"
@@ -120,7 +254,7 @@ const Register = () => {
                   />
                   <FormField
                     control={form.control}
-                    name="phone"
+                    name="phone_number"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>{t('register.phone')}</FormLabel>
@@ -144,6 +278,132 @@ const Register = () => {
                       </FormItem>
                     )}
                   />
+                  <FormField
+                    control={form.control}
+                    name="state"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('register.state')}</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="city"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('register.city')}</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="pincode"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('register.pincode')}</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="dob"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('register.dob')}</FormLabel>
+                        <FormControl>
+                          <Input type="date" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="gender"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('register.gender')}</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={t('register.select_gender')} />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="M">{t('register.male')}</SelectItem>
+                            <SelectItem value="F">{t('register.female')}</SelectItem>
+                            <SelectItem value="O">{t('register.other')}</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="role"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('register.role')}</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={t('register.select_role')} />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="ADMIN">Administrator</SelectItem>
+                            <SelectItem value="LAW_ENFORCEMENT">Law Enforcement</SelectItem>
+                            <SelectItem value="NGO">NGO Worker</SelectItem>
+                            <SelectItem value="CITIZEN">Citizen</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="flex gap-4 items-end">
+                    <FormField
+                      control={form.control}
+                      name="latitude"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>Latitude</FormLabel>
+                          <FormControl>
+                            <Input {...field} readOnly />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="longitude"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>Longitude</FormLabel>
+                          <FormControl>
+                            <Input {...field} readOnly />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <Button type="button" onClick={getLocation}>
+                      Get Location
+                    </Button>
+                  </div>
                   <div className="flex gap-4 justify-between">
                     <div>
                       <div>
@@ -151,7 +411,7 @@ const Register = () => {
                       </div>
                       <FormField
                         control={form.control}
-                        name="aadharPhoto"
+                        name="aadhaar_image"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>{t('register.aadhar_photo')}</FormLabel>
@@ -172,7 +432,7 @@ const Register = () => {
                       </div>
                       <FormField
                         control={form.control}
-                        name="profilePhoto"
+                        name="profile_picture"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>{t('register.profile_photo')}</FormLabel>

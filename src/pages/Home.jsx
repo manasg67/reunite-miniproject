@@ -38,7 +38,7 @@ export default function LandingPage() {
           </div>
           
           {/* Right column with image */}
-          <div className="flex justify-center md:justify-end ml-32">
+          <div className="flex justify-center md:justify-end -mt-24 ml-32">
             <img
               src="/images/mobile_1.jpg"
               alt="Unite Hearts Initiative"
