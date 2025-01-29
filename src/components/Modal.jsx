@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { cn } from '@/lib/utils';
 
-export function Modal({ trigger, title, description, content, openModal, setOpenModal, className }) {
+export function Modal({ trigger, title, description, content, openModal, setOpenModal, style }) {
   const [internalOpen, setInternalOpen] = useState(false);
 
   useEffect(() => {
@@ -19,11 +19,11 @@ export function Modal({ trigger, title, description, content, openModal, setOpen
   };
 
   return (
-    <Dialog className={cn("w-[425px] sm:w-[90rem]", className)} open={internalOpen} onOpenChange={handleOpenChange}>
+    <Dialog  open={internalOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         {trigger}
-      </DialogTrigger>
-      <DialogContent className="w-[425px] sm:w-[90rem]">
+      </DialogTrigger >
+      <DialogContent className={cn("w-[425px] rounded sm:w-[90rem]", style)}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}

@@ -57,8 +57,8 @@ const Profile = () => {
           </CardContent>
           <CardFooter>
             <Modal
-              className="w-full bg-white"
-              trigger={<Button className="w-full bg-gray-700 rounded text-white">Add Family Members</Button>}
+              style="w-full bg-white rounded"
+              trigger={<Button className="w-full bg-gray-700 rounded text-white hover:bg-gray-800">Add Family Members</Button>}
               title="Add Family Members"
               description="Add details of your family members here."
               content={<div>Family member form goes here.</div>}
