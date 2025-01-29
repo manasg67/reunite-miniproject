@@ -7,7 +7,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import MissingPersonDetails from './pages/admin/MissingPersonDetails';
 import CaseManagement from './pages/admin/CaseManagement';
 import ProfilePage from './pages/user/ProfilePage';
-
+import PublicForum from './pages/PublicForum';
 
 const AppRoutes = () => (
   // <Router>
@@ -19,6 +19,7 @@ const AppRoutes = () => (
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/missing-person" element={<MissingPersonDetails />} />
       <Route path="/case-management" element={<CaseManagement />} />
+      <Route path="/public-forum" element={<PublicForum />} />
     </Routes>
   // </Router>
 );
