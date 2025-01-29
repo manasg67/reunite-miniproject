@@ -1,36 +1,39 @@
 import React from 'react';
 import { Star, ArrowRight, Heart, Clock, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const SuccessStories = () => {
+  const { t } = useTranslation();
+
   const stories = [
     {
-      title: "Reunited After 5 Years",
-      description: "A family was reunited with their missing child after 5 years, thanks to our Aadhaar-based search system.",
+      title: t('success_stories.stories.story_1.title'),
+      description: t('success_stories.stories.story_1.description'),
       image: "/api/placeholder/400/300",
       stats: {
-        timeToFind: "5 years",
-        location: "Mumbai",
-        impactedLives: "15+"
+        timeToFind: t('success_stories.stories.story_1.time'),
+        location: t('success_stories.stories.story_1.location'),
+        impactedLives: t('success_stories.stories.story_1.impact')
       }
     },
     {
-      title: "Found Within Hours",
-      description: "An elderly person with memory issues was located within hours of being reported missing.",
+      title: t('success_stories.stories.story_2.title'),
+      description: t('success_stories.stories.story_2.description'),
       image: "/api/placeholder/400/300",
       stats: {
-        timeToFind: "6 hours",
-        location: "Delhi",
-        impactedLives: "8+"
+        timeToFind: t('success_stories.stories.story_2.time'),
+        location: t('success_stories.stories.story_2.location'),
+        impactedLives: t('success_stories.stories.story_2.impact')
       }
     },
     {
-      title: "Cross-State Reunion",
-      description: "A missing teenager was found in a different state and safely returned to their family.",
+      title: t('success_stories.stories.story_3.title'),
+      description: t('success_stories.stories.story_3.description'),
       image: "/api/placeholder/400/300",
       stats: {
-        timeToFind: "72 hours",
-        location: "Karnataka",
-        impactedLives: "12+"
+        timeToFind: t('success_stories.stories.story_3.time'),
+        location: t('success_stories.stories.story_3.location'),
+        impactedLives: t('success_stories.stories.story_3.impact')
       }
     }
   ];
@@ -44,26 +47,26 @@ const SuccessStories = () => {
             <Heart className="h-12 w-12 text-red-500" />
           </div>
           <h2 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 md:text-5xl">
-            Reuniting Families, Restoring Hope
+            {t('success_stories.title')}
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-gray-600">
-            Every reunion is a testament to hope. Discover the stories of families brought back together through our platform's innovative approach.
+            {t('success_stories.subtitle')}
           </p>
         </div>
 
         {/* Stats */}
         <div className="mb-16 grid grid-cols-3 gap-4 rounded-xl bg-blue-50 p-8">
           <div className="text-center">
-            <div className="text-3xl font-bold text-blue-600">1000+</div>
-            <div className="text-sm text-gray-600">Families Reunited</div>
+            <div className="text-3xl font-bold text-blue-600">{t('success_stories.stats.families_reunited.number')}</div>
+            <div className="text-sm text-gray-600">{t('success_stories.stats.families_reunited.label')}</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-blue-600">24hrs</div>
-            <div className="text-sm text-gray-600">Average Response Time</div>
+            <div className="text-3xl font-bold text-blue-600">{t('success_stories.stats.response_time.number')}</div>
+            <div className="text-sm text-gray-600">{t('success_stories.stats.response_time.label')}</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-blue-600">98%</div>
-            <div className="text-sm text-gray-600">Success Rate</div>
+            <div className="text-3xl font-bold text-blue-600">{t('success_stories.stats.success_rate.number')}</div>
+            <div className="text-sm text-gray-600">{t('success_stories.stats.success_rate.label')}</div>
           </div>
         </div>
 
@@ -100,7 +103,7 @@ const SuccessStories = () => {
                   <div className="text-right text-blue-600">{story.stats.location}</div>
                 </div>
                 <button className="flex items-center text-blue-600 hover:text-blue-700">
-                  Read full story
+                  {t('success_stories.read_full_story')}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </button>
               </div>
@@ -111,7 +114,7 @@ const SuccessStories = () => {
         {/* CTA */}
         <div className="mt-12 text-center">
           <button className="rounded-full bg-blue-600 px-8 py-3 text-lg font-semibold text-white transition-colors hover:bg-blue-700">
-            View All Success Stories
+            {t('success_stories.view_all')}
           </button>
         </div>
       </div>

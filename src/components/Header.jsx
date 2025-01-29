@@ -33,8 +33,8 @@ const Header = () => {
           </svg>
         </button>
       </div>
-      <div className="flex-1">
-        <a className="btn btn-ghost text-xl">ReUnite</a>
+      <div className="flex-1" >
+        <a className="btn btn-ghost text-xl" onClick={() => navigate('/')} > ReUnite</a>
       </div>
       <div className="flex gap-2">
         <LanguageSwitcher />
