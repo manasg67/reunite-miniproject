@@ -54,7 +54,7 @@ const Header = () => {
             <ul tabIndex={0} className="menu dropdown-content backdrop-blur-sm bg-[url('/vintage.jpg')] bg-cover bg-center bg-opacity-70 border text-[#4a3728] border-[#8b4513] rounded-box z-[1] mt-4 w-52 p-2 shadow">
               <div className='px-2 py-2'><Link to='/profile' className='flex gap-2 items-center w-full'><UserCircle2/> Profile</Link></div>
               <hr className='border-amber-900'/>
-              <div className='px-2 py-2'><Link to='/grievances' className='text-foreground flex gap-2 items-center w-full'>Report</Link></div>
+              <div className='px-2 py-2'><Link to='/report-missing' className='text-foreground flex gap-2 items-center w-full'>Report</Link></div>
               <hr className='border-amber-900'/>
               <div className='px-2 py-2'><Link to='/my-complains' className='text-foreground flex gap-2 items-center w-full'>My Complains</Link></div>
               <hr className='border-amber-900'/>

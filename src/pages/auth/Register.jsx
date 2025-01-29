@@ -160,7 +160,7 @@ const Register = () => {
     <section className="dark:bg-gray-900">
       <div className="flex justify-center min-h-screen" style={{ backgroundImage: "url(/images/register.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
         <div className="flex items-center w-full py-10 px-2 mx-auto lg:px-12 lg:w-3/5">
-          <Card className="w-full bg-opacity-90 bg-gray-100 top-10 relative border border-black">
+          <Card className="w-full bg-opacity-[0.95] bg-gray-100 top-10 relative border border-black">
             <CardHeader>
               <CardTitle className="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white">
                 {t('register.get_started')}
@@ -406,9 +406,11 @@ const Register = () => {
                   </div>
                   <div className="flex gap-4 justify-between">
                     <div>
-                      <div>
-                        <img src={aadharPreview || "/images/aadhar.png"} alt="aadhar" className="w-20 h-20" />
-                      </div>
+                      {aadharPreview && (
+                        <div>
+                          <img src={aadharPreview || "/images/aadhar.png"} alt="aadhar" className="w-20 h-20" />
+                        </div>
+                      )}
                       <FormField
                         control={form.control}
                         name="aadhaar_image"
@@ -427,9 +429,11 @@ const Register = () => {
                       />
                     </div>
                     <div>
-                      <div>
-                        <img src={profilePreview || "/images/aadhar.png"} alt="profile" className="w-20 h-20" />
-                      </div>
+                      {profilePreview && (
+                        <div>
+                          <img src={profilePreview || "/images/aadhar.png"} alt="profile" className="w-20 h-20" />
+                        </div>
+                      )}
                       <FormField
                         control={form.control}
                         name="profile_picture"
