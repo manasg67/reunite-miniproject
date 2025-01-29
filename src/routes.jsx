@@ -12,6 +12,7 @@ import Poster from './pages/user/Poster';
 
 import PublicForum from './pages/PublicForum';
 import ReportMissing from './pages/user/ReportMissing';
+import MissingPersonMap from './pages/MissingPersonMap';
 
 const AppRoutes = () => (
   // <Router>
@@ -27,6 +28,7 @@ const AppRoutes = () => (
       <Route path="/create-poster/:id" element={<Poster />} />
       <Route path="/public-forum" element={<PublicForum />} />
       <Route path="/report-missing" element={<ReportMissing />} />
+      <Route path="/missing-person-map" element={<MissingPersonMap />} />
     </Routes>
   // </Router>
 );
