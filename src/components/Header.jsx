@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import LanguageSwitcher from './LanguageSwitcher';
 // import { Button } from './ui/button';
 // import { Button } from './ui/button';
 
@@ -28,6 +29,7 @@ const Header = () => {
         <a className="btn btn-ghost text-xl">ReUnite</a>
       </div>
       <div className="flex gap-2">
+      <LanguageSwitcher />
         <button className='btn btn-primary' onClick={() => navigate('/login')}>Login</button>
         <button className='btn bg-green-500' onClick={() => navigate('/register')}>Register</button>
       </div>
