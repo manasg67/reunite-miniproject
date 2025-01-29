@@ -13,6 +13,7 @@ import { UserPlus, Upload, Clock, MapPin } from "lucide-react";
 import SearchableLocationInput from "@/components/loactionSearch";
 import { FamilyMemberSelect } from "@/components/FamilySearch";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
 const genders = ["male", "female", "other"]
@@ -35,6 +36,8 @@ const ReportMissing = () => {
     missingTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, t('report_missing.form.validation.time_invalid')),
     lastLocation: z.string().min(1, { message: t('report_missing.form.validation.location_required') }),
   })
+
+  const navigate = useNavigate();
 
   const [isFamilyMember, setIsFamilyMember] = useState(false)
 
@@ -107,6 +110,9 @@ const ReportMissing = () => {
 
     // Log the English data that will be sent to the API
     console.log('Data to be sent to API:', formDataInEnglish);
+    navigate('/my-complains');
+
+
 
     // Here you would send the English data to your backend
     // apiCall(formDataInEnglish);

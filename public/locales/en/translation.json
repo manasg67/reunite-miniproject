@@ -120,6 +120,11 @@
   },
 
   "home": {
+    "nearby": {
+      "title": "Missing Person Map",
+      "description": "Use our advanced facial recognition technology to find potential matches.",
+      "button": "See nearby missing persons"
+    },
     "hero": {
       "title": "Unite Hearts, Find Hope",
       "subtitle": "Empowering communities to bring loved ones home through innovative technology and compassionate action.",

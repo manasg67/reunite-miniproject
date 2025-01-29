@@ -1,11 +1,14 @@
 import React from 'react';
-import { Button } from "@/components/ui/button"
-import { Search, Users, Shield, Clock, AlertTriangle, Camera, FileText, Fingerprint, Heart } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Search, Users, Shield, Clock, AlertTriangle, Camera, FileText, Fingerprint, Heart } from "lucide-react";
 import { useTranslation } from 'react-i18next';
-import Banner from "../components/banner"
-import SuccessStories from "../components/SuccessStories"
+import Banner from "../components/banner";
+import SuccessStories from "../components/SuccessStories";
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import MissingPersonsMap from './MissingPersonMap';
+// import MissingPersonsMap from '@/components/Maps';
+// import MissingPersonsMap from "../components/MissingPersonsMap"; // Import the map component
 
 export default function LandingPage() {
   const { t } = useTranslation();
@@ -114,6 +117,26 @@ export default function LandingPage() {
                   </Button>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* View Nearby Missing Persons Section */}
+        <section className="w-full py-24 bg-white">
+          <div className="container mx-auto px-4 md:px-6">
+            <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">
+              {t('home.nearby.title')}
+            </h2>
+            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-lg">
+              <MissingPersonsMap />
+            </div>
+            <div className="flex justify-center mt-8">
+              <Button 
+                className="bg-blue-500 hover:bg-blue-600 text-white"
+                onClick={() => navigate('/missing-person-map')}
+              >
+                {t('home.nearby.button')}
+              </Button>
             </div>
           </div>
         </section>
