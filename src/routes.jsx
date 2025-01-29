@@ -3,10 +3,11 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
-import AdminDashboard from './pages/AdminDashboard';
-import MissingPersonDetails from './pages/MissingPersonDetails';
-import CaseManagement from './pages/CaseManagement';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import MissingPersonDetails from './pages/admin/MissingPersonDetails';
+import CaseManagement from './pages/admin/CaseManagement';
 import ProfilePage from './pages/user/ProfilePage';
+
 
 const AppRoutes = () => (
   // <Router>
