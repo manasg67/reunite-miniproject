@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const Banner = () => {
+  const { t } = useTranslation();
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const features = [
     {
-      title: "Search Person by Face Photo.",
-      description: "Search by face photo to get the best possible results providing you with accurate and similar matched results.",
+      title: t('banner.features.face_search.title'),
+      description: t('banner.features.face_search.description'),
       image: "/images/police_face_scan.jpg",
-      buttonText: "Search Person By Face Photo"
+      buttonText: t('banner.features.face_search.button')
     },
     {
-      title: "Report Missing Person",
-      description: "File a detailed report about a missing person with all relevant information to help in the search process.",
+      title: t('banner.features.report_missing.title'),
+      description: t('banner.features.report_missing.description'),
       image: "/images/sbidentity.jpg",
-      buttonText: "File Missing Report"
+      buttonText: t('banner.features.report_missing.button')
     }
   ];
 
@@ -39,12 +41,14 @@ const Banner = () => {
           <button 
             onClick={prevSlide}
             className="absolute left-4 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-white/30 p-2 text-white hover:bg-white/50"
+            aria-label="Previous slide"
           >
             <ChevronLeft className="h-6 w-6" />
           </button>
           <button 
             onClick={nextSlide}
             className="absolute right-4 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-white/30 p-2 text-white hover:bg-white/50"
+            aria-label="Next slide"
           >
             <ChevronRight className="h-6 w-6" />
           </button>
@@ -57,7 +61,7 @@ const Banner = () => {
                 <div className="overflow-hidden rounded-full">
                   <img
                     src={features[currentSlide].image}
-                    alt="Feature illustration"
+                    alt={features[currentSlide].title}
                     className="h-[400px] w-[400px] object-cover transition-opacity duration-500"
                   />
                 </div>

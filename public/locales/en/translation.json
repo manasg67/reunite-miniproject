@@ -111,5 +111,133 @@
     "report_received": "Your report has been received",
     "important_info": "Important Information",
     "contact_message": "You will be contacted by their family member shortly, or you can contact them using the information provided above."
+  },
+
+  "home": {
+    "hero": {
+      "title": "Unite Hearts, Find Hope",
+      "subtitle": "Empowering communities to bring loved ones home through innovative technology and compassionate action.",
+      "stats": {
+        "reunited": "10,000+ Reunited",
+        "secure": "Secure & Confidential"
+      }
+    },
+    "alert": {
+      "title": "Awareness Alert",
+      "message": "Every minute counts in finding a missing person. Report immediately!"
+    },
+    "search": {
+      "title": "Multiple Ways to Search",
+      "by_name": {
+        "title": "Search by Name",
+        "description": "Enter the full name of the missing person to start your search.",
+        "button": "Search by Name"
+      },
+      "by_aadhaar": {
+        "title": "Search by Aadhaar",
+        "description": "Use Aadhaar number for a precise and quick search.",
+        "button": "Search by Aadhaar"
+      },
+      "by_face": {
+        "title": "Facial Recognition",
+        "description": "Upload a photo to use our advanced facial recognition technology.",
+        "button": "Search by Face"
+      }
+    }
+  },
+
+  "success_stories": {
+    "title": "Reuniting Families, Restoring Hope",
+    "subtitle": "Every reunion is a testament to hope. Discover the stories of families brought back together through our platform's innovative approach.",
+    "stats": {
+      "families_reunited": {
+        "number": "1000+",
+        "label": "Families Reunited"
+      },
+      "response_time": {
+        "number": "24hrs",
+        "label": "Average Response Time"
+      },
+      "success_rate": {
+        "number": "98%",
+        "label": "Success Rate"
+      }
+    },
+    "stories": {
+      "story_1": {
+        "title": "Reunited After 5 Years",
+        "description": "A family was reunited with their missing child after 5 years, thanks to our Aadhaar-based search system.",
+        "time": "5 years",
+        "location": "Mumbai",
+        "impact": "15+"
+      },
+      "story_2": {
+        "title": "Found Within Hours",
+        "description": "An elderly person with memory issues was located within hours of being reported missing.",
+        "time": "6 hours",
+        "location": "Delhi",
+        "impact": "8+"
+      },
+      "story_3": {
+        "title": "Cross-State Reunion",
+        "description": "A missing teenager was found in a different state and safely returned to their family.",
+        "time": "72 hours",
+        "location": "Karnataka",
+        "impact": "12+"
+      }
+    },
+    "read_full_story": "Read full story",
+    "view_all": "View All Success Stories"
+  },
+
+  "banner": {
+    "features": {
+      "face_search": {
+        "title": "Search Person by Face Photo",
+        "description": "Search by face photo to get the best possible results providing you with accurate and similar matched results.",
+        "button": "Search Person By Face Photo"
+      },
+      "report_missing": {
+        "title": "Report Missing Person",
+        "description": "File a detailed report about a missing person with all relevant information to help in the search process.",
+        "button": "File Missing Report"
+      }
+    }
+  },
+
+  "footer": {
+    "about": {
+      "title": "About Reunite",
+      "description": "Reunite is a platform dedicated to finding missing persons and reuniting families using advanced technology and a compassionate approach."
+    },
+    "quick_links": {
+      "title": "Quick Links",
+      "home": "Home",
+      "search": "Search",
+      "report": "Report a Missing Person",
+      "success_stories": "Success Stories"
+    },
+    "resources": {
+      "title": "Resources",
+      "faqs": "FAQs",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "contact": "Contact Us"
+    },
+    "connect": {
+      "title": "Connect With Us",
+      "social": {
+        "facebook": "Facebook",
+        "twitter": "Twitter",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn"
+      },
+      "newsletter": {
+        "title": "Subscribe to our newsletter:",
+        "placeholder": "Enter your email",
+        "button": "Subscribe"
+      }
+    },
+    "copyright": "© {year} Reunite. All rights reserved by Cloudflare."
   }
 }
