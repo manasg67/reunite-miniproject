@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Calendar, User, AlertTriangle, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import Anupama from '../../assets/sample.jpg'
 
 // Mock data remains the same
@@ -63,7 +64,7 @@ const Modal = ({ isOpen, onClose, children }) => {
   );
 };
 
-const FamilyMemberCard = ({ member, onContact }) => (
+const FamilyMemberCard = ({ member, onContact, t }) => (
   <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
     <div className="p-6">
       <div className="relative">
@@ -87,13 +88,13 @@ const FamilyMemberCard = ({ member, onContact }) => (
         onClick={() => onContact(member)}
         className="mt-4 w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg"
       >
-        Contact
+        {t('missing_person_details.contact')}
       </button>
     </div>
   </div>
 );
 
-const ContactModal = ({ member, isOpen, onClose }) => (
+const ContactModal = ({ member, isOpen, onClose, t }) => (
   <Modal isOpen={isOpen} onClose={onClose}>
     <div className="text-center mb-6">
       <img
@@ -104,7 +105,7 @@ const ContactModal = ({ member, isOpen, onClose }) => (
       <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
         {member?.name}
       </h2>
-      <p className="text-gray-600">Contact information for {member?.relation}</p>
+      <p className="text-gray-600">{t('missing_person_details.contact_info')} {member?.relation}</p>
     </div>
     <div className="space-y-4">
       <a href={`tel:${member?.phone}`} className="flex items-center p-4 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition-colors duration-200">
@@ -119,22 +120,21 @@ const ContactModal = ({ member, isOpen, onClose }) => (
   </Modal>
 );
 
-const FoundModal = ({ isOpen, onClose }) => (
+const FoundModal = ({ isOpen, onClose, t }) => (
   <Modal isOpen={isOpen} onClose={onClose}>
     <div className="text-center mb-6">
       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
         <AlertTriangle className="h-8 w-8 text-green-600" />
       </div>
-      <h2 className="text-2xl font-bold text-green-600 mb-2">Thank You!</h2>
-      <p className="text-gray-600">Your report has been received</p>
+      <h2 className="text-2xl font-bold text-green-600 mb-2">{t('missing_person_details.thank_you')}</h2>
+      <p className="text-gray-600">{t('missing_person_details.report_received')}</p>
     </div>
     <div className="bg-green-50 rounded-xl p-6">
       <div className="flex items-start">
         <div>
-          <h3 className="text-green-800 font-bold text-lg">Important Information</h3>
+          <h3 className="text-green-800 font-bold text-lg">{t('missing_person_details.important_info')}</h3>
           <p className="text-green-700 mt-2 leading-relaxed">
-            You will be contacted by their family member shortly, or you can contact them using the information
-            provided above.
+            {t('missing_person_details.contact_message')}
           </p>
         </div>
       </div>
@@ -143,6 +143,7 @@ const FoundModal = ({ isOpen, onClose }) => (
 );
 
 const MissingPersonDetails = () => {
+  const { t } = useTranslation();
   const [isPersonFound, setIsPersonFound] = useState(false);
   const [selectedFamilyMember, setSelectedFamilyMember] = useState(null);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
@@ -159,7 +160,7 @@ const MissingPersonDetails = () => {
   };
 
   return (
-    <div className="min-h-screen  bg-gradient-to-b from-blue-100 to-white dark:from-gray-900 dark:to-gray-800 p-8">
+    <div className="min-h-screen  bg-gradient-to-b from-blue-100 to-white dark:from-gray-900 dark:to-gray-800 p-8 mt-16">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden backdrop-blur-lg bg-white/90">
         <div className="md:flex">
           <div className="md:flex-shrink-0 relative">
@@ -171,7 +172,7 @@ const MissingPersonDetails = () => {
               className="h-full w-full object-cover md:w-80"
             />
             <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl shadow-lg">
-              <span className="text-sm font-medium text-indigo-600">Case #{missingPerson.caseNumber}</span>
+              <span className="text-sm font-medium text-indigo-600">{t('missing_person_details.case_number')} {missingPerson.caseNumber}</span>
             </div>
           </div>
           <div className="p-8">
@@ -181,15 +182,15 @@ const MissingPersonDetails = () => {
             <div className="mt-6 space-y-4">
               <div className="flex items-center p-3 bg-indigo-50 rounded-xl">
                 <User className="h-5 w-5 mr-3 text-indigo-600" />
-                <span className="text-gray-700 font-medium">Age: {missingPerson.age}</span>
+                <span className="text-gray-700 font-medium">{t('missing_person_details.age')}: {missingPerson.age}</span>
               </div>
               <div className="flex items-center p-3 bg-purple-50 rounded-xl">
                 <MapPin className="h-5 w-5 mr-3 text-purple-600" />
-                <span className="text-gray-700 font-medium">Last seen: {missingPerson.lastLocation}</span>
+                <span className="text-gray-700 font-medium">{t('missing_person_details.last_seen')}: {missingPerson.lastLocation}</span>
               </div>
               <div className="flex items-center p-3 bg-indigo-50 rounded-xl">
                 <Calendar className="h-5 w-5 mr-3 text-indigo-600" />
-                <span className="text-gray-700 font-medium">Date: {missingPerson.lastSeen}</span>
+                <span className="text-gray-700 font-medium">{t('missing_person_details.date')}: {missingPerson.lastSeen}</span>
               </div>
             </div>
             <p className="mt-6 text-gray-600 leading-relaxed">{missingPerson.description}</p>
@@ -198,7 +199,7 @@ const MissingPersonDetails = () => {
 
         <div className="p-8 bg-gradient-to-br from-gray-50 to-white">
           <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-8">
-            Family Members
+            {t('missing_person_details.family_members')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {missingPerson.familyMembers.map((member) => (
@@ -206,6 +207,7 @@ const MissingPersonDetails = () => {
                 key={member.id}
                 member={member}
                 onContact={handleContactMember}
+                t={t}
               />
             ))}
           </div>
@@ -216,7 +218,7 @@ const MissingPersonDetails = () => {
             onClick={handlePersonFound}
             className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
-            Report Person Found
+            {t('missing_person_details.report_found')}
           </button>
         </div>
       </div>
@@ -225,11 +227,13 @@ const MissingPersonDetails = () => {
         member={selectedFamilyMember}
         isOpen={isContactModalOpen}
         onClose={() => setIsContactModalOpen(false)}
+        t={t}
       />
 
       <FoundModal
         isOpen={isFoundModalOpen}
         onClose={() => setIsFoundModalOpen(false)}
+        t={t}
       />
     </div>
   );
