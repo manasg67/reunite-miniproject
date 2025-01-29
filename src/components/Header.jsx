@@ -50,7 +50,8 @@ const Header = () => {
               <hr className='border-amber-900'/>
               <div className='px-2 py-2'><Link to='/grievances' className='text-foreground flex gap-2 items-center w-full'>Report</Link></div>
               <hr className='border-amber-900'/>
-              <div className='px-2 py-2'><Link to='/my-grievances' className='text-foreground flex gap-2 items-center w-full'>My Grievances</Link></div>
+              <div className='px-2 py-2'><Link to='/my-complains' className='text-foreground flex gap-2 items-center w-full'>My Complains</Link></div>
+
               <hr className='border-amber-900'/>
               <div className='px-2 py-2 ' onClick={()=>{
                 // handleLogout();
