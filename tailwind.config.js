@@ -56,6 +56,12 @@ export default {
   		}
   	}
   },
+  future: {
+    hoverOnlyWhenSupported: true, // Optional, for Tailwind features
+  },
+  experimental: {
+    optimizeUniversalDefaults: true, // Prevents Tailwind from using OKLCH
+  },
   plugins: [
     require("tailwindcss-animate"),
     require('daisyui'),
