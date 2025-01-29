@@ -93,31 +93,125 @@ const FamilyMemberCard = ({ member, onContact }) => (
   </div>
 );
 
-const ContactModal = ({ member, isOpen, onClose }) => (
-  <Modal isOpen={isOpen} onClose={onClose}>
-    <div className="text-center mb-6">
-      <img
-        src={member?.photo || Anupama}
-        alt={member?.name}
-        className="w-24 h-24 rounded-full mx-auto border-4 border-indigo-100 ring-4 ring-indigo-50 mb-4"
-      />
-      <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-        {member?.name}
-      </h2>
-      <p className="text-gray-600">Contact information for {member?.relation}</p>
-    </div>
-    <div className="space-y-4">
-      <a href={`tel:${member?.phone}`} className="flex items-center p-4 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition-colors duration-200">
-        <Phone className="h-6 w-6 mr-4 text-indigo-600" />
-        <span className="text-gray-700 font-medium">{member?.phone}</span>
-      </a>
-      <a href={`mailto:${member?.email}`} className="flex items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors duration-200">
-        <Mail className="h-6 w-6 mr-4 text-purple-600" />
-        <span className="text-gray-700 font-medium">{member?.email}</span>
-      </a>
-    </div>
-  </Modal>
-);
+const ContactModal = ({ member, isOpen, onClose }) => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      text: "Hello, I'm from the admin team.",
+      sender: "admin"
+    },
+    {
+      id: 2,
+      text: "Hi, thank you for reaching out. Any updates about my family member?",
+      sender: "user"
+    },
+    {
+      id: 3,
+      text: "We're actively investigating. I'll keep you updated.",
+      sender: "admin"
+    }
+  ]);
+  const [newMessage, setNewMessage] = useState("");
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (newMessage.trim() === "") return;
+
+    const message = {
+      id: messages.length + 1,
+      text: newMessage,
+      sender: "admin",
+      timestamp: new Date()
+    };
+
+    setMessages([...messages, message]);
+    setNewMessage("");
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <div className="text-center mb-6">
+        <img
+          src={member?.photo || Anupama}
+          alt={member?.name}
+          className="w-24 h-24 rounded-full mx-auto border-4 border-indigo-100 ring-4 ring-indigo-50 mb-4"
+        />
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          {member?.name}
+        </h2>
+        <p className="text-gray-600">Contact information for {member?.relation}</p>
+      </div>
+      <div className="space-y-4">
+        <a href={`tel:${member?.phone}`} className="flex items-center p-4 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition-colors duration-200">
+          <Phone className="h-6 w-6 mr-4 text-indigo-600" />
+          <span className="text-gray-700 font-medium">{member?.phone}</span>
+        </a>
+        <button 
+          onClick={() => setIsChatOpen(true)} 
+          className="w-full flex items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors duration-200"
+        >
+          <Mail className="h-6 w-6 mr-4 text-purple-600" />
+          <span className="text-gray-700 font-medium">Open Chat</span>
+        </button>
+      </div>
+
+      {/* Chat Modal */}
+      <Modal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)}>
+        <div className="w-full max-w-lg">
+          <div className="flex items-center border-b pb-4 mb-4">
+            <img
+              src={member?.photo || Anupama}
+              alt={member?.name}
+              className="w-12 h-12 rounded-full mr-4"
+            />
+            <div>
+              <h3 className="font-bold text-lg">{member?.name}</h3>
+              <p className="text-sm text-gray-600">{member?.relation}</p>
+            </div>
+          </div>
+
+          {/* Chat Messages */}
+          <div className="space-y-4 mb-4 max-h-[300px] overflow-y-auto">
+            {messages.map((message) => (
+              <div 
+                key={message.id} 
+                className={`flex ${message.sender === 'admin' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div 
+                  className={`rounded-lg p-3 max-w-[70%] ${
+                    message.sender === 'admin' 
+                      ? 'bg-indigo-600 text-white' 
+                      : 'bg-gray-100'
+                  }`}
+                >
+                  {message.text}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Chat Input */}
+          <form onSubmit={handleSendMessage} className="flex gap-2">
+            <input
+              type="text"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              placeholder="Type your message..."
+              className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
+            />
+            <button 
+              type="submit"
+              className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              Send
+            </button>
+          </form>
+        </div>
+      </Modal>
+    </Modal>
+  );
+};
 
 const FoundModal = ({ isOpen, onClose }) => (
   <Modal isOpen={isOpen} onClose={onClose}>
