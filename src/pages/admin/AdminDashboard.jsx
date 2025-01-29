@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Search, User, Filter } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Anupama from '../../assets/sample.jpg'
 
 // Mock data remains the same
@@ -16,7 +17,7 @@ const mockMissingPersons = [
 ];
 
 
-const PersonCard = ({ person, onViewDetails }) => (
+const PersonCard = ({ person, onViewDetails, t }) => (
   <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
     <div className="relative">
       <img src={person.photo || Anupama} alt={person.name} className="w-full h-56 object-cover" />
@@ -38,17 +39,17 @@ const PersonCard = ({ person, onViewDetails }) => (
         onClick={() => onViewDetails(person.id)}
         className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 font-medium shadow-md hover:shadow-lg"
       >
-        View Details
+        {t('admin_dashboard.view_details')}
       </button>
     </div>
   </div>
 );
 
-const FilterSection = ({ nameFilter, caseNumberFilter, areaFilter, setNameFilter, setCaseNumberFilter, setAreaFilter, handleFilter }) => (
+const FilterSection = ({ nameFilter, caseNumberFilter, areaFilter, setNameFilter, setCaseNumberFilter, setAreaFilter, handleFilter, t }) => (
   <div className="bg-white rounded-2xl shadow-xl mb-8 p-8 backdrop-blur-lg bg-white/90">
     <div className="mb-6">
       <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-        Filter Missing Persons
+        {t('admin_dashboard.filter_title')}
       </h2>
     </div>
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -56,7 +57,7 @@ const FilterSection = ({ nameFilter, caseNumberFilter, areaFilter, setNameFilter
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
         <input
           type="text"
-          placeholder="Filter by name"
+          placeholder={t('admin_dashboard.filter_by_name')}
           value={nameFilter}
           onChange={(e) => setNameFilter(e.target.value)}
           className="w-full pl-10 pr-4 py-3 border-2 border-indigo-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
@@ -66,7 +67,7 @@ const FilterSection = ({ nameFilter, caseNumberFilter, areaFilter, setNameFilter
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
         <input
           type="text"
-          placeholder="Filter by case number"
+          placeholder={t('admin_dashboard.filter_by_case')}
           value={caseNumberFilter}
           onChange={(e) => setCaseNumberFilter(e.target.value)}
           className="w-full pl-10 pr-4 py-3 border-2 border-indigo-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
@@ -76,7 +77,7 @@ const FilterSection = ({ nameFilter, caseNumberFilter, areaFilter, setNameFilter
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
         <input
           type="text"
-          placeholder="Filter by area"
+          placeholder={t('admin_dashboard.filter_by_area')}
           value={areaFilter}
           onChange={(e) => setAreaFilter(e.target.value)}
           className="w-full pl-10 pr-4 py-3 border-2 border-indigo-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
@@ -88,7 +89,7 @@ const FilterSection = ({ nameFilter, caseNumberFilter, areaFilter, setNameFilter
         className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center font-medium shadow-md hover:shadow-lg"
         onClick={handleFilter}
       >
-        <Filter className="mr-2 h-5 w-5" /> Apply Filters
+        <Filter className="mr-2 h-5 w-5" /> {t('admin_dashboard.apply_filters')}
       </button>
     </div>
   </div>
@@ -96,6 +97,7 @@ const FilterSection = ({ nameFilter, caseNumberFilter, areaFilter, setNameFilter
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [filteredPersons, setFilteredPersons] = useState(mockMissingPersons);
   const [nameFilter, setNameFilter] = useState("");
   const [caseNumberFilter, setCaseNumberFilter] = useState("");
@@ -116,22 +118,8 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen  bg-gradient-to-b from-blue-100 to-white dark:from-gray-900 dark:to-gray-800">
-      <header className="bg-white shadow-lg backdrop-blur-lg bg-white/90">
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Missing Persons Dashboard
-            </h1>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm font-medium text-gray-600">Welcome, Admin</span>
-              <div className="p-2 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-xl">
-                <User className="h-6 w-6 text-indigo-600" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen  bg-gradient-to-b from-blue-100 to-white dark:from-gray-900 dark:to-gray-800 mt-16">
+
 
       <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <FilterSection
@@ -142,6 +130,7 @@ const AdminDashboard = () => {
           setCaseNumberFilter={setCaseNumberFilter}
           setAreaFilter={setAreaFilter}
           handleFilter={handleFilter}
+          t={t}
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -150,13 +139,14 @@ const AdminDashboard = () => {
               key={person.id} 
               person={person} 
               onViewDetails={handleViewDetails}
+              t={t}
             />
           ))}
         </div>
 
         {filteredPersons.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-2xl text-gray-500 font-medium">No matching records found</p>
+            <p className="text-2xl text-gray-500 font-medium">{t('admin_dashboard.no_records')}</p>
           </div>
         )}
       </main>
