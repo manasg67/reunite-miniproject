@@ -12,14 +12,22 @@ const missingPersons = [
     name: "John Doe",
     photo: "/images/missing-example.jpg",
     contactNo: "123-456-7890",
+    age: "25",
+    height: "5'10\"",
+    weight: "160 lbs",
     lastSeen: "2023-05-15",
+    missingSince: "2023-05-15",
   },
   {
     id: "2",
     name: "Jane Smith",
     photo: "/images/missing-example.jpg",
     contactNo: "987-654-3210",
+    age: "25",
+    height: "5'10\"",
+    weight: "160 lbs",
     lastSeen: "2023-05-20",
+    missingSince: "2023-05-15",
   },
 ]
 

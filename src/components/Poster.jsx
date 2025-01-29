@@ -2,12 +2,6 @@ import React, { useState, useEffect } from "react"
 import QRCode from "qrcode"
 import { Page, Text, View, Image, Document, StyleSheet } from "@react-pdf/renderer"
 
-// Register a bold font for the heavy text elements
-// Font.register({
-//   family: "Impact",
-//   src: "https://db.onlinewebfonts.com/t/f1a21bcb69b46f9598c55f825fe36eb5.ttf",
-// })
-
 export default function PosterPDF({ person }) {
   const [qrCode, setQrCode] = useState(null)
 
@@ -31,7 +25,7 @@ export default function PosterPDF({ person }) {
     },
     missingText: {
       fontSize: 72,
-      fontFamily: "Impact",
+      fontWeight: "bold",
       color: "#FF0000",
       textAlign: "center",
       padding: "0 20px",
@@ -57,9 +51,11 @@ export default function PosterPDF({ person }) {
       fontSize: 36,
       color: "white",
       textAlign: "center",
-      fontFamily: "Impact",
+      fontWeight: "bold",
     },
     detailsSection: {
+      display: "flex",
+      flexDirection: "row",
       padding: "20px 40px",
       alignItems: "center",
     },
@@ -71,14 +67,14 @@ export default function PosterPDF({ person }) {
     blackBar: {
       backgroundColor: "black",
       padding: 15,
-      marginTop: 20,
+      marginTop: 5,
       width: "100%",
     },
     missingSinceText: {
       color: "white",
       fontSize: 32,
       textAlign: "center",
-      fontFamily: "Impact",
+      fontWeight: "bold",
     },
     lastSeenText: {
       fontSize: 24,
@@ -104,12 +100,12 @@ export default function PosterPDF({ person }) {
       color: "white",
       fontSize: 48,
       textAlign: "center",
-      fontFamily: "Impact",
+      fontWeight: "bold",
     },
     qrSection: {
       position: "absolute",
       right: 20,
-      bottom: 100,
+      bottom: 200,
       width: 100,
       height: 100,
     },
