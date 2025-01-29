@@ -17,6 +17,7 @@ const missingPersons = [
     weight: "160 lbs",
     lastSeen: "2023-05-15",
     missingSince: "2023-05-15",
+    
   },
   {
     id: "2",

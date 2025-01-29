@@ -11,6 +11,7 @@ import MyComplains from './pages/user/MyComplains';
 import Poster from './pages/user/Poster';
 
 import PublicForum from './pages/PublicForum';
+import ReportMissing from './pages/user/ReportMissing';
 
 const AppRoutes = () => (
   // <Router>
@@ -25,6 +26,7 @@ const AppRoutes = () => (
       <Route path="/my-complains" element={<MyComplains />} />
       <Route path="/create-poster/:id" element={<Poster />} />
       <Route path="/public-forum" element={<PublicForum />} />
+      <Route path="/report-missing" element={<ReportMissing />} />
     </Routes>
   // </Router>
 );
