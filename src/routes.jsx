@@ -10,6 +10,7 @@ import ProfilePage from './pages/user/ProfilePage';
 import MyComplains from './pages/user/MyComplains';
 import Poster from './pages/user/Poster';
 
+import PublicForum from './pages/PublicForum';
 
 const AppRoutes = () => (
   // <Router>
@@ -23,6 +24,7 @@ const AppRoutes = () => (
       <Route path="/case-management" element={<CaseManagement />} />
       <Route path="/my-complains" element={<MyComplains />} />
       <Route path="/create-poster/:id" element={<Poster />} />
+      <Route path="/public-forum" element={<PublicForum />} />
     </Routes>
   // </Router>
 );

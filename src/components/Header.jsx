@@ -30,9 +30,9 @@ const Header = () => {
         <a className="btn btn-ghost text-xl">ReUnite</a>
       </div>
       <div className="flex gap-2">
-      {/* <LanguageSwitcher />
+      <LanguageSwitcher />
         <button className='btn btn-primary' onClick={() => navigate('/login')}>Login</button>
-        <button className='btn bg-green-500' onClick={() => navigate('/register')}>Register</button> */}
+        <button className='btn bg-green-500' onClick={() => navigate('/register')}>Register</button>
 
         <div className="dropdown dropdown-end ">
             <div tabIndex={0} role="button" className=" w-10 sm:w-12 h-10 sm:h-12 flex justify-center items-center rounded-full p-0 px-5 sm:px-1 bg-amber-300 border-2 border-amber-950 hover:bg-amber-200">
