@@ -9,7 +9,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="navbar fixed top-0 left-0 right-0 z-50 shadow-lg bg-base-100">
+    <div className="navbar fixed top-0 left-0 right-0 z-50 shadow-lg bg-white">
       <div className="flex-none">
         <button className="btn btn-square btn-ghost">
           <svg
