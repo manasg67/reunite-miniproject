@@ -10,16 +10,24 @@ const missingPersons= [
   {
     id: "1",
     name: "John Doe",
-    photo: "/placeholder.svg?height=300&width=200",
+    photo: "/images/missing-example.jpg",
     contactNo: "123-456-7890",
+    age: "25",
+    height: "5'10\"",
+    weight: "160 lbs",
     lastSeen: "2023-05-15",
+    missingSince: "2023-05-15",
   },
   {
     id: "2",
     name: "Jane Smith",
-    photo: "/placeholder.svg?height=300&width=200",
+    photo: "/images/missing-example.jpg",
     contactNo: "987-654-3210",
+    age: "25",
+    height: "5'10\"",
+    weight: "160 lbs",
     lastSeen: "2023-05-20",
+    missingSince: "2023-05-15",
   },
 ]
 
@@ -37,7 +45,7 @@ const MissingPersonCard = ({ person }) => (
       <p className="text-gray-600 mb-4">Last Seen: {person.lastSeen}</p>
       <Link to={`/create-poster/${person.id}`} >
         <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-          Create Poster
+          See more info...
         </Button>
 
       </Link>
