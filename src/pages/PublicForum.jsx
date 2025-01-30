@@ -21,8 +21,7 @@ export default function PublicForum() {
     ]
     setMessages(initialMessages)
 
-    const user = prompt("Please enter your name:")
-    setUsername(user || "Anonymous")
+  
 
     scrollToBottom()
   }, [])

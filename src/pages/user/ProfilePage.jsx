@@ -7,7 +7,10 @@ import { Input } from "@/components/ui/input"
 import { useNavigate } from "react-router-dom"
 
 const Profile = () => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('userData')
+    return storedUser ? JSON.parse(storedUser) : null
+  })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [familyPasskey, setFamilyPasskey] = useState(null)
@@ -55,7 +58,6 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       const accessToken = localStorage.getItem('accessToken')
-      const storedFamilyId = localStorage.getItem('familyId')
       
       if (!accessToken) {
         navigate('/login')
@@ -67,9 +69,17 @@ const Profile = () => {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
           }
         })
+
+        if (response.status === 401) {
+          // Token is invalid or expired
+          localStorage.removeItem('accessToken')
+          localStorage.removeItem('refreshToken')
+          localStorage.removeItem('userData')
+          navigate('/login')
+          return
+        }
 
         if (!response.ok) {
           throw new Error('Failed to fetch user profile')
@@ -77,16 +87,20 @@ const Profile = () => {
 
         const data = await response.json()
         setUser(data)
+        localStorage.setItem('userData', JSON.stringify(data))
         
-        // Try to fetch family members using stored family ID or from user data
-        const familyId = data.family_id || storedFamilyId
-        if (familyId) {
-          await fetchFamilyMembers(familyId)
+        // Only fetch family members if there's a family_id
+        if (data.family_id) {
+          await fetchFamilyMembers(data.family_id)
         }
-        
-        setLoading(false)
       } catch (err) {
+        console.error('Error fetching user profile:', err)
+        // Check if stored user data exists before redirecting
+        if (!localStorage.getItem('userData')) {
+          navigate('/login')
+        }
         setError(err.message)
+      } finally {
         setLoading(false)
       }
     }

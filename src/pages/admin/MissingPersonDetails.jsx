@@ -1,48 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Phone, Mail, MapPin, Calendar, User, AlertTriangle, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useParams, useNavigate } from 'react-router-dom';
 import Anupama from '../../assets/sample.jpg'
-
-// Mock data remains the same
-const missingPerson = {
-  id: 1,
-  name: "John Doe",
-  photo: Anupama,
-  age: 30,
-  lastSeen: "2023-06-15",
-  lastLocation: "Central Park, New York",
-  description: "John was last seen wearing a blue t-shirt and jeans. He has a distinctive tattoo on his right arm.",
-  caseNumber: "MP001",
-  familyMembers: [
-    {
-      id: 1,
-      name: "Jane Doe",
-      relation: "Wife",
-      photo: Anupama,
-      phone: "+1234567890",
-      email: "jane@example.com",
-
-    },
-    {
-      id: 2,
-      name: "Mike Doe",
-      relation: "Brother",
-      photo: Anupama,
-      phone: "+1987654321",
-      email: "mike@example.com",
-
-    },
-    {
-      id: 3,
-      name: "Sarah Doe",
-      relation: "Sister",
-      photo: Anupama,
-      phone: "+1122334455",
-      email: "sarah@example.com",
-
-    },
-  ],
-};
 
 const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
@@ -68,13 +28,6 @@ const FamilyMemberCard = ({ member, onContact, t }) => (
   <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
     <div className="p-6">
       <div className="relative">
-        <img
-          src={member.photo || Anupama}
-          alt={member.name}
-          width={100}
-          height={100}
-          className="rounded-full mx-auto border-4 border-indigo-100 ring-4 ring-indigo-50"
-        />
         <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white px-4 py-1 rounded-full text-sm">
           {member.relation}
         </div>
@@ -84,6 +37,7 @@ const FamilyMemberCard = ({ member, onContact, t }) => (
       <h3 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
         {member.name}
       </h3>
+      <p className="text-gray-600 mt-2">{member.phone}</p>
       <button
         onClick={() => onContact(member)}
         className="mt-4 w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg"
@@ -237,36 +191,107 @@ const FoundModal = ({ isOpen, onClose, t }) => (
 );
 
 const MissingPersonDetails = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const { t } = useTranslation();
-  const [isPersonFound, setIsPersonFound] = useState(false);
-  const [selectedFamilyMember, setSelectedFamilyMember] = useState(null);
+  const [missingPerson, setMissingPerson] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [isFoundModalOpen, setIsFoundModalOpen] = useState(false);
+  const [selectedContact, setSelectedContact] = useState(null);
 
-  const handlePersonFound = () => {
-    setIsPersonFound(true);
-    setIsFoundModalOpen(true);
-  };
+  useEffect(() => {
+    const fetchMissingPersonDetails = async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      
+      if (!accessToken) {
+        navigate('/login');
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/missing-persons/missing-persons/${id}/`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Accept': 'application/json',
+          }
+        });
+
+        if (response.status === 404) {
+          throw new Error('Person not found');
+        }
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch missing person details');
+        }
+
+        const data = await response.json();
+        setMissingPerson(data);
+        
+      } catch (err) {
+        console.error('Error fetching details:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchMissingPersonDetails();
+    }
+  }, [id, navigate]);
 
   const handleContactMember = (member) => {
-    setSelectedFamilyMember(member);
+    setSelectedContact(member);
     setIsContactModalOpen(true);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  if (error || !missingPerson) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-red-500">Error: {error || 'Person not found'}</div>
+      </div>
+    );
+  }
+
+  // Create contact objects for emergency and secondary contacts
+  const contacts = [
+    {
+      id: 1,
+      name: missingPerson.emergency_contact_name,
+      relation: missingPerson.emergency_contact_relation,
+      phone: missingPerson.emergency_contact_phone,
+    },
+    {
+      id: 2,
+      name: missingPerson.secondary_contact_name,
+      relation: "Secondary Contact",
+      phone: missingPerson.secondary_contact_phone,
+    }
+  ];
+
   return (
-    <div className="min-h-screen  bg-gradient-to-b from-blue-100 to-white dark:from-gray-900 dark:to-gray-800 p-8 mt-16">
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white dark:from-gray-900 dark:to-gray-800 p-8 mt-16">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden backdrop-blur-lg bg-white/90">
         <div className="md:flex">
           <div className="md:flex-shrink-0 relative">
             <img
-              src={missingPerson.photo || "/placeholder.svg"}
+              src={missingPerson.recent_photo}
               alt={missingPerson.name}
-              width={300}
-              height={300}
               className="h-full w-full object-cover md:w-80"
             />
             <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl shadow-lg">
-              <span className="text-sm font-medium text-indigo-600">{t('missing_person_details.case_number')} {missingPerson.caseNumber}</span>
+              <span className="text-sm font-medium text-indigo-600">
+                {t('missing_person_details.case_number')} {missingPerson.case_number}
+              </span>
             </div>
           </div>
           <div className="p-8">
@@ -276,57 +301,48 @@ const MissingPersonDetails = () => {
             <div className="mt-6 space-y-4">
               <div className="flex items-center p-3 bg-indigo-50 rounded-xl">
                 <User className="h-5 w-5 mr-3 text-indigo-600" />
-                <span className="text-gray-700 font-medium">{t('missing_person_details.age')}: {missingPerson.age}</span>
+                <span className="text-gray-700 font-medium">
+                  {t('missing_person_details.age')}: {missingPerson.age_when_missing}
+                </span>
               </div>
               <div className="flex items-center p-3 bg-purple-50 rounded-xl">
                 <MapPin className="h-5 w-5 mr-3 text-purple-600" />
-                <span className="text-gray-700 font-medium">{t('missing_person_details.last_seen')}: {missingPerson.lastLocation}</span>
+                <span className="text-gray-700 font-medium">
+                  {t('missing_person_details.last_seen')}: {missingPerson.last_seen_location}
+                </span>
               </div>
               <div className="flex items-center p-3 bg-indigo-50 rounded-xl">
                 <Calendar className="h-5 w-5 mr-3 text-indigo-600" />
-                <span className="text-gray-700 font-medium">{t('missing_person_details.date')}: {missingPerson.lastSeen}</span>
+                <span className="text-gray-700 font-medium">
+                  {t('missing_person_details.date')}: {new Date(missingPerson.last_seen_date).toLocaleDateString()}
+                </span>
               </div>
             </div>
-            <p className="mt-6 text-gray-600 leading-relaxed">{missingPerson.description}</p>
+            <p className="mt-6 text-gray-600 leading-relaxed">{missingPerson.last_seen_details}</p>
           </div>
         </div>
 
         <div className="p-8 bg-gradient-to-br from-gray-50 to-white">
           <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-8">
-            {t('missing_person_details.family_members')}
+            {t('missing_person_details.contact_info')}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {missingPerson.familyMembers.map((member) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {contacts.map((contact) => (
               <FamilyMemberCard
-                key={member.id}
-                member={member}
+                key={contact.id}
+                member={contact}
                 onContact={handleContactMember}
                 t={t}
               />
             ))}
           </div>
         </div>
-
-        <div className="p-8 bg-gradient-to-br from-white to-gray-50">
-          <button
-            onClick={handlePersonFound}
-            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-          >
-            {t('missing_person_details.report_found')}
-          </button>
-        </div>
       </div>
 
       <ContactModal
-        member={selectedFamilyMember}
+        member={selectedContact}
         isOpen={isContactModalOpen}
         onClose={() => setIsContactModalOpen(false)}
-        t={t}
-      />
-
-      <FoundModal
-        isOpen={isFoundModalOpen}
-        onClose={() => setIsFoundModalOpen(false)}
         t={t}
       />
     </div>

@@ -441,6 +441,10 @@
     "my_complains": "मेरी रिपोर्ट",
     "logout": "लॉग आउट",
     "login": "लॉग इन",
-    "register": "रजिस्टर"
+    "register": "रजिस्टर",
+    "admin": {
+      "dashboard": "व्यवस्थापक डैशबोर्ड",
+      "case_management": "केस प्रबंधन"
+    }
   }
 }

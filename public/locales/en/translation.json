@@ -430,6 +430,10 @@
     "my_complains": "My Reports",
     "logout": "Logout",
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "admin": {
+      "dashboard": "Admin Dashboard",
+      "case_management": "Case Management"
+    }
   }
 }

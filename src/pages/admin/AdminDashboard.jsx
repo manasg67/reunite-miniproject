@@ -1,38 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, User, Filter } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Anupama from '../../assets/sample.jpg'
-
-// Mock data remains the same
-const mockMissingPersons = [
-  { id: 1, name: "john deo", photo: Anupama, caseNumber: "MP001", area: "Downtown" },
-  { id: 2, name: "Jane Smith", photo: Anupama, caseNumber: "MP002", area: "Suburb" },
-
-  { id: 3, name: "Mike Johnson", photo: Anupama, caseNumber: "MP003", area: "Rural" },
-  { id: 4, name: "Emily Brown", photo: Anupama, caseNumber: "MP004", area: "City Center" },
-
-  { id: 5, name: "Alex Wilson", photo: Anupama, caseNumber: "MP005", area: "Coastal" },
-  { id: 6, name: "Sarah Lee", photo: Anupama, caseNumber: "MP006", area: "Mountain" }
-];
-
 
 const PersonCard = ({ person, onViewDetails, t }) => (
   <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
     <div className="relative">
-      <img src={person.photo || Anupama} alt={person.name} className="w-full h-56 object-cover" />
+      <img 
+        src={person.recent_photo} 
+        alt={person.name} 
+        className="w-full h-56 object-cover" 
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = 'fallback-image-url.jpg'; // Add a fallback image URL
+        }}
+      />
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
         <h3 className="text-xl font-bold text-white">{person.name}</h3>
       </div>
-
     </div>
     <div className="p-5 space-y-3">
       <div className="flex items-center space-x-2">
         <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">
-          {person.caseNumber}
+          {person.case_number}
         </span>
         <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">
-          {person.area}
+          {person.last_seen_location}
         </span>
       </div>
       <button 
@@ -98,29 +91,88 @@ const FilterSection = ({ nameFilter, caseNumberFilter, areaFilter, setNameFilter
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [filteredPersons, setFilteredPersons] = useState(mockMissingPersons);
+  const [missingPersons, setMissingPersons] = useState([]);
+  const [filteredPersons, setFilteredPersons] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [nameFilter, setNameFilter] = useState("");
   const [caseNumberFilter, setCaseNumberFilter] = useState("");
   const [areaFilter, setAreaFilter] = useState("");
 
+  useEffect(() => {
+    const fetchMissingPersons = async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      
+      if (!accessToken) {
+        navigate('/login');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/missing-persons/missing-persons/search/', {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Accept': 'application/json',
+          }
+        });
+
+        if (response.status === 401) {
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          navigate('/login');
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch missing persons');
+        }
+
+        const data = await response.json();
+        setMissingPersons(data);
+        setFilteredPersons(data);
+      } catch (err) {
+        console.error('Error fetching missing persons:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMissingPersons();
+  }, [navigate]);
+
   const handleFilter = () => {
-    const filtered = mockMissingPersons.filter(
+    const filtered = missingPersons.filter(
       (person) =>
         person.name.toLowerCase().includes(nameFilter.toLowerCase()) &&
-        person.caseNumber.toLowerCase().includes(caseNumberFilter.toLowerCase()) &&
-        person.area.toLowerCase().includes(areaFilter.toLowerCase())
+        person.case_number.toLowerCase().includes(caseNumberFilter.toLowerCase()) &&
+        person.last_seen_location.toLowerCase().includes(areaFilter.toLowerCase())
     );
     setFilteredPersons(filtered);
   };
 
-  const handleViewDetails = () => {
-    navigate('/missing-person');
+  const handleViewDetails = (id) => {
+    navigate(`/missing-person/${id}`);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-red-500">Error: {error}</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen  bg-gradient-to-b from-blue-100 to-white dark:from-gray-900 dark:to-gray-800 mt-16">
-
-
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white dark:from-gray-900 dark:to-gray-800 mt-16">
       <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <FilterSection
           nameFilter={nameFilter}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import LanguageSwitcher from './LanguageSwitcher';
-import { LogOut, UserCircle2, Menu, X, Search, Map, MessageSquare } from 'lucide-react';
+import { LogOut, UserCircle2, Menu, X, Search, Map, MessageSquare, FileText, Settings } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const Header = () => {
@@ -9,6 +9,7 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isAuthenticated = !!localStorage.getItem('accessToken');
+  const userRole = localStorage.getItem('role');
 
   const searchRoutes = [
     { path: '/search/by-name', icon: 'text', label: t('nav.search.by_name') },
@@ -16,11 +17,17 @@ const Header = () => {
     { path: '/search/by-face', icon: 'camera', label: t('nav.search.by_face') },
   ];
 
+  const adminRoutes = [
+    { path: '/admin', icon: <Settings className="w-4 h-4" />, label: t('nav.admin.dashboard') },
+    { path: '/case-management', icon: <FileText className="w-4 h-4" />, label: t('nav.admin.case_management') },
+  ];
+
   const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    localStorage.clear();
     navigate('/');
   };
+
+  const isAdmin = userRole === 'ADMIN' || userRole === 'LAW_ENFORCEMENT';
 
   return (
     <>
@@ -57,7 +64,7 @@ const Header = () => {
                   </button>
                 </>
               ) : (
-                <UserMenu handleLogout={handleLogout} t={t} />
+                <UserMenu handleLogout={handleLogout} t={t} isAdmin={isAdmin} />
               )}
             </div>
           </div>
@@ -74,7 +81,12 @@ const Header = () => {
               </label>
             </div>
 
-            <NavLinks searchRoutes={searchRoutes} t={t} />
+            <NavLinks 
+              searchRoutes={searchRoutes} 
+              adminRoutes={adminRoutes}
+              isAdmin={isAdmin}
+              t={t} 
+            />
           </ul>
         </div>
       </div>
@@ -84,7 +96,13 @@ const Header = () => {
         <div className="navbar fixed top-0 left-0 right-0 z-50 shadow-lg bg-white px-4">
           <div className="flex-1">
             <Link to="/" className="btn btn-ghost text-xl">ReUnite</Link>
-            <NavLinks searchRoutes={searchRoutes} t={t} isDesktop />
+            <NavLinks 
+              searchRoutes={searchRoutes} 
+              adminRoutes={adminRoutes}
+              isAdmin={isAdmin}
+              t={t} 
+              isDesktop 
+            />
           </div>
 
           <div className="flex items-center gap-4">
@@ -99,7 +117,7 @@ const Header = () => {
                 </button>
               </div>
             ) : (
-              <UserMenu handleLogout={handleLogout} t={t} />
+              <UserMenu handleLogout={handleLogout} t={t} isAdmin={isAdmin} />
             )}
           </div>
         </div>
@@ -108,7 +126,7 @@ const Header = () => {
   );
 };
 
-const NavLinks = ({ searchRoutes, t, isDesktop }) => {
+const NavLinks = ({ searchRoutes, adminRoutes, isAdmin, t, isDesktop }) => {
   const location = useLocation();
   const baseClasses = isDesktop 
     ? "flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
@@ -150,11 +168,23 @@ const NavLinks = ({ searchRoutes, t, isDesktop }) => {
         <MessageSquare className="w-5 h-5" />
         <span>{t('nav.forum')}</span>
       </Link>
+
+      {/* Admin Routes */}
+      {isAdmin && adminRoutes.map((route) => (
+        <Link
+          key={route.path}
+          to={route.path}
+          className={`${baseClasses} ${location.pathname === route.path ? 'bg-gray-100' : ''}`}
+        >
+          {route.icon}
+          <span>{route.label}</span>
+        </Link>
+      ))}
     </nav>
   );
 };
 
-const UserMenu = ({ handleLogout, t }) => (
+const UserMenu = ({ handleLogout, t, isAdmin }) => (
   <div className="dropdown dropdown-end">
     <div 
       tabIndex={0} 
@@ -180,6 +210,22 @@ const UserMenu = ({ handleLogout, t }) => (
           {t('nav.my_complains')}
         </Link>
       </li>
+      {isAdmin && (
+        <>
+          <li>
+            <Link to='/admin' className="py-3">
+              <Settings className="w-4 h-4" />
+              {t('nav.admin.dashboard')}
+            </Link>
+          </li>
+          <li>
+            <Link to='/case-management' className="py-3">
+              <FileText className="w-4 h-4" />
+              {t('nav.admin.case_management')}
+            </Link>
+          </li>
+        </>
+      )}
       <li>
         <button onClick={handleLogout} className="py-3">
           <LogOut className="w-4 h-4" />
