@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Instagram } from "lucide-react";
+import { FileText, Loader2 } from "lucide-react";
 
 export function LoadingOverlay({ message }) {
   return (
@@ -26,7 +26,7 @@ export function LoadingOverlay({ message }) {
             transition={{ duration: 1.5, repeat: Infinity }}
             className="absolute inset-0 flex items-center justify-center"
           >
-            <Instagram className="w-8 h-8 text-blue-500" />
+            <FileText className="w-8 h-8 text-blue-500" />
           </motion.div>
         </div>
         <p className="mt-4 text-lg font-medium text-gray-700">{message}</p>

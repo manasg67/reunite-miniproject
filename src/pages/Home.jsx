@@ -19,7 +19,7 @@ export default function LandingPage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative w-full min-h-screen py-12 md:py-24 lg:py-32 xl:py-48 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-500 to-blue-200"/>
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-300 via-blue-500 to-blue-600"/>
           <div className="absolute inset-0 opacity-30 bg-[url('/public/pattern.svg')]"/>
           <div className="container relative px-4 md:px-6 mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">

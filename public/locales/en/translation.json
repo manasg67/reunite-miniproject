@@ -307,65 +307,63 @@
 
   "report_missing": {
     "title": "Report Missing Person",
-    "family_member": {
-      "toggle": "Family Member",
-      "select": "Select Family Member"
-    },
     "subtitle": "Please provide accurate information to help locate the missing person",
     "form_title": "Missing Person Details",
     "form_description": "Fill in all required information about the missing person",
     "sections": {
       "personal_info": "Personal Information",
       "physical_details": "Physical Details",
+      "medical_info": "Medical Information",
+      "contact_info": "Contact Information",
+      "case_details": "Case Details",
+      "additional_info": "Additional Information",
       "documents": "Required Documents",
-      "missing_details": "Missing Person Details"
+      "missing_details": "Missing Details"
     },
     "form": {
       "name": "Name",
-      "surname": "Surname",
-      "gender": {
-        "label": "Gender",
-        "select": "Select gender",
-        "male": "Male",
-        "female": "Female",
-        "other": "Other"
-      },
-      "height": "Height (cm)",
-      "weight": "Weight (kg)",
-      "blood_group": {
-        "label": "Blood Group",
-        "select": "Select blood group"
-      },
-      "dob": "Date of Birth",
-      "documents": {
-        "aadhaar": "Aadhaar Photo",
-        "person": "Missing Person's Photo",
-        "upload_prompt": "Click or drag and drop to upload"
-      },
-      "physical_details": {
-        "height_placeholder": "Enter height in cm",
-        "weight_placeholder": "Enter weight in kg"
-      },
+      "age_when_missing": "Age When Missing",
+      "date_of_birth": "Date of Birth",
+      "gender": "Gender",
+      "blood_group": "Blood Group",
+      "blood_group_select": "Select blood group",
+      "nationality": "Nationality",
+      "height": "Height",
+      "weight": "Weight",
+      "complexion": "Complexion",
+      "complexion_select": "Select complexion",
+      "identifying_marks": "Identifying Marks",
+      "physical_attributes": "Physical Attributes",
+      "hair_color": "Hair Color",
+      "eye_color": "Eye Color",
+      "build": "Build",
+      "last_seen_details": "Last Seen Details",
+      "last_seen_wearing": "Last Seen Wearing",
+      "fir_number": "FIR Number",
+      "status": "Status",
+      "status_select": "Select status",
+      "priority_level": "Priority Level",
+      "medical_conditions": "Medical Conditions",
+      "medications": "Medications",
+      "emergency_contact_name": "Emergency Contact Name",
+      "emergency_contact_phone": "Emergency Contact Phone",
+      "emergency_contact_relation": "Emergency Contact Relation",
+      "secondary_contact_name": "Secondary Contact Name",
+      "secondary_contact_phone": "Secondary Contact Phone",
+      "last_known_latitude": "Last Known Latitude",
+      "last_known_longitude": "Last Known Longitude",
+      "aadhaar_number": "Aadhaar Number",
       "missing_details": {
         "date": "Missing Date",
-        "time": "Missing Time",
         "location": "Last Known Location"
       },
-      "submit": "Submit Report",
-      "validation": {
-        "name_min": "Name must be at least 2 characters.",
-        "surname_min": "Surname must be at least 2 characters.",
-        "gender_required": "Please select a gender.",
-        "height_range": "Height must be between 50cm and 300cm",
-        "weight_range": "Weight must be between 1kg and 500kg",
-        "aadhaar_required": "Aadhaar photo is required.",
-        "photo_required": "Missing person's photo is required.",
-        "dob_required": "Date of birth is required.",
-        "blood_group_required": "Please select a blood group.",
-        "missing_date_required": "Missing date is required.",
-        "time_invalid": "Invalid time format.",
-        "location_required": "Last known location is required."
-      }
+      "submit": "Submit Report"
+    },
+    "status": {
+      "preparing": "Preparing your report...",
+      "processing_data": "Processing data...",
+      "uploading_documents": "Uploading documents...",
+      "submitting": "Submitting report..."
     }
   },
 
