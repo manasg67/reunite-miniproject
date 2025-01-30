@@ -12,6 +12,8 @@ const Login = () => {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null)
+
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({
@@ -25,7 +27,7 @@ const Login = () => {
     setIsLoading(true)
 
     try {
-      const response = await fetch('https://a943-2401-4900-57ef-65c5-3846-7218-fe1e-cecf.ngrok-free.app/api/accounts/login/', {
+      const response = await fetch('http://127.0.0.1:8000/api/accounts/login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,14 +39,21 @@ const Login = () => {
       console.log(data)
       if (response.ok) {
         localStorage.setItem('token', data.token)
-        localStorage.setItem('user', JSON.stringify(data.user))
+        localStorage.setItem('user_id', data.user.id)
+        localStorage.setItem('username', data.user.username)
+        localStorage.setItem('email', data.user.email)
+        localStorage.setItem('first_name', data.user.first_name)
+        localStorage.setItem('last_name', data.user.last_name)
+        
         alert(t('login.success'))
         navigate('/')
       } else {
-        throw new Error(data.message || t('login.error'))
+        const errorMessage = data.detail || data.message || t('login.error')
+        throw new Error(errorMessage)
       }
     } catch (error) {
-      alert(error.message || t('login.error'))
+      console.error('Login error:', error)
+      setError(error.message || t('login.error'))
     } finally {
       setIsLoading(false)
     }

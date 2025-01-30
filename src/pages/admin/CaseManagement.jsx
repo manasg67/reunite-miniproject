@@ -1,96 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, Edit, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-
-// Mock data for cases
-const mockCases = [
-  {
-    id: 1,
-    name: "John Doe",
-    caseNumber: "MP001",
-    status: "Open",
-    lastUpdated: "2023-06-15",
-    assignedTo: "Detective Smith",
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    caseNumber: "MP002",
-    status: "Closed",
-    lastUpdated: "2023-05-20",
-    assignedTo: "Detective Johnson",
-  },
-  {
-    id: 3,
-    name: "Mike Johnson",
-    caseNumber: "MP003",
-    status: "Under Investigation",
-    lastUpdated: "2023-06-10",
-    assignedTo: "Detective Williams",
-  },
-  {
-    id: 4,
-    name: "Emily Brown",
-    caseNumber: "MP004",
-    status: "Open",
-    lastUpdated: "2023-06-18",
-    assignedTo: "Detective Davis",
-  },
-  {
-    id: 5,
-    name: "Alex Wilson",
-    caseNumber: "MP005",
-    status: "Closed",
-    lastUpdated: "2023-04-30",
-    assignedTo: "Detective Moore",
-  },
-];
-
-const Modal = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-white/90 backdrop-blur-md rounded-2xl max-w-[425px] w-full relative border border-white/20 shadow-2xl">
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 text-gray-500 hover:text-red-500 transition-colors"
-        >
-          ✕
-        </button>
-        <div className="p-8">
-          {children}
-        </div>
-      </div>
-    </div>
-  );
-};
+import { useNavigate } from 'react-router-dom';
 
 const CaseManagement = () => {
   const { t } = useTranslation();
-  const [cases, setCases] = useState(mockCases);
+  const navigate = useNavigate();
+  const [cases, setCases] = useState([]);
+  const [filteredCases, setFilteredCases] = useState([]);
   const [nameFilter, setNameFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCase, setSelectedCase] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [updateLoading, setUpdateLoading] = useState(false);
 
-  const handleFilter = () => {
-    const filtered = mockCases.filter(
-      (case_) =>
-        case_.name.toLowerCase().includes(nameFilter.toLowerCase()) &&
-        (statusFilter === "" || case_.status === statusFilter)
-    );
-    setCases(filtered);
-  };
+  useEffect(() => {
+    const fetchCases = async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      
+      if (!accessToken) {
+        navigate('/login');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/missing-persons/missing-persons/search/', {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Accept': 'application/json',
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch cases');
+        }
+
+        const data = await response.json();
+        setCases(data);
+        setFilteredCases(data);
+      } catch (err) {
+        console.error('Error fetching cases:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCases();
+  }, [navigate]);
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case "Open":
+      case 'MISSING':
         return <AlertTriangle className="h-5 w-5 text-amber-500" />;
-      case "Closed":
+      case 'FOUND':
         return <CheckCircle className="h-5 w-5 text-emerald-500" />;
-      case "Under Investigation":
+      case 'INVESTIGATING':
         return <Search className="h-5 w-5 text-blue-500" />;
+      case 'CLOSED':
+        return <XCircle className="h-5 w-5 text-gray-500" />;
       default:
         return null;
     }
@@ -98,66 +66,115 @@ const CaseManagement = () => {
 
   const getStatusStyle = (status) => {
     switch (status) {
-      case "Open":
+      case 'MISSING':
         return "bg-amber-100 text-amber-800 border-amber-200";
-      case "Closed":
+      case 'FOUND':
         return "bg-emerald-100 text-emerald-800 border-emerald-200";
-      case "Under Investigation":
+      case 'INVESTIGATING':
         return "bg-blue-100 text-blue-800 border-blue-200";
+      case 'CLOSED':
+        return "bg-gray-100 text-gray-800 border-gray-200";
       default:
         return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
-  const handleEditCase = (case_) => {
-    setSelectedCase(case_);
-    setIsModalOpen(true);
+  const handleFilter = () => {
+    const filtered = cases.filter((case_) => {
+      const nameMatch = case_.name.toLowerCase().includes(nameFilter.toLowerCase());
+      const statusMatch = statusFilter === "" || case_.status === statusFilter;
+      return nameMatch && statusMatch;
+    });
+    setFilteredCases(filtered);
   };
 
+  useEffect(() => {
+    handleFilter();
+  }, [nameFilter, statusFilter]); // Auto-filter when inputs change
+
+  const handleStatusUpdate = async (id, newStatus) => {
+    setUpdateLoading(true);
+    const accessToken = localStorage.getItem('accessToken');
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/missing-persons/missing-persons/${id}/update_status/`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update status');
+      }
+
+      // Update the local state to reflect the change
+      const updatedCases = cases.map(case_ => 
+        case_.id === id ? { ...case_, status: newStatus } : case_
+      );
+      setCases(updatedCases);
+      setFilteredCases(updatedCases);
+
+    } catch (err) {
+      console.error('Error updating status:', err);
+      alert('Failed to update status. Please try again.');
+    } finally {
+      setUpdateLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-red-500">Error: {error}</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen  bg-gradient-to-b from-blue-100 to-white dark:from-gray-900 dark:to-gray-800 text-black p-8 mt-16">
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white dark:from-gray-900 dark:to-gray-800 text-black p-8 mt-16">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-black mb-2 tracking-tight">
           {t('case_management.title')}
         </h1>
         <p className="text-black mb-8">{t('case_management.subtitle')}</p>
 
-        <div className="bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl p-8 mb-8 border border-black">
-          <h2 className="text-xl font-semibold text-black mb-6">
-            {t('case_management.filter_title')}
-          </h2>
-          <div className="flex flex-wrap gap-4">
+        {/* Search and Filter Section */}
+        <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="relative">
             <input
               type="text"
-              placeholder={t('case_management.filter_by_name')}
+              placeholder="Search by name..."
               value={nameFilter}
               onChange={(e) => setNameFilter(e.target.value)}
-              className="flex-grow px-6 py-3 bg-white/10 border border-black rounded-xl text-black placeholder:text-black/50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent backdrop-blur-sm"
+              className="w-full px-4 py-2 pl-10 bg-white/10 backdrop-blur-md rounded-xl border border-black text-black placeholder-black/60"
             />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black/60" />
+          </div>
+          <div className="relative">
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-[180px] px-6 py-3 bg-white/10 border border-black rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent backdrop-blur-sm"
+              className="w-full px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-black text-black appearance-none"
             >
-              <option value="" className="text-black">
-                {t('case_management.all_statuses')}
-              </option>
-              <option value="Open" className="text-black">
-                {t('case_management.status.open')}
-              </option>
-              <option value="Closed" className="text-black">
-                {t('case_management.status.closed')}
-              </option>
-              <option value="Under Investigation" className="text-black">
-                {t('case_management.status.under_investigation')}
-              </option>
+              <option value="">All Statuses</option>
+              <option value="MISSING">Missing</option>
+              <option value="FOUND">Found</option>
+              <option value="INVESTIGATING">Under Investigation</option>
+              <option value="CLOSED">Case Closed</option>
             </select>
-            <button
-              onClick={handleFilter}
-              className="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-black rounded-xl transition-all duration-200 flex items-center gap-2 hover:shadow-lg hover:-translate-y-0.5"
-            >
-              <Filter className="h-4 w-4" /> {t('case_management.apply_filters')}
-            </button>
+            <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black/60" />
           </div>
         </div>
 
@@ -176,10 +193,7 @@ const CaseManagement = () => {
                     {t('case_management.table.status')}
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-black uppercase tracking-wider">
-                    {t('case_management.table.last_updated')}
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-black uppercase tracking-wider">
-                    {t('case_management.table.assigned_to')}
+                    {t('case_management.table.last_seen')}
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-black uppercase tracking-wider">
                     {t('case_management.table.actions')}
@@ -187,9 +201,9 @@ const CaseManagement = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/10">
-                {cases.map((case_) => (
+                {filteredCases.map((case_) => (
                   <tr key={case_.id} className="hover:bg-white/5 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-black">{case_.caseNumber}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-black">{case_.case_number}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-black">{case_.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -199,15 +213,19 @@ const CaseManagement = () => {
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-black/80">{case_.lastUpdated}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-black/80">{case_.assignedTo}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-black">{case_.last_seen_location}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => handleEditCase(case_)}
-                        className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-black rounded-xl text-black transition-all duration-200 inline-flex items-center gap-2 hover:shadow-lg hover:-translate-y-0.5"
+                      <select
+                        onChange={(e) => handleStatusUpdate(case_.id, e.target.value)}
+                        className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-black rounded-xl text-black transition-all duration-200"
+                        disabled={updateLoading}
+                        value={case_.status}
                       >
-                        <Edit className="h-4 w-4" /> Edit
-                      </button>
+                        <option value="MISSING">Missing</option>
+                        <option value="FOUND">Found</option>
+                        <option value="INVESTIGATING">Under Investigation</option>
+                        <option value="CLOSED">Case Closed</option>
+                      </select>
                     </td>
                   </tr>
                 ))}
@@ -216,41 +234,6 @@ const CaseManagement = () => {
           </div>
         </div>
       </div>
-
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-black">
-            {t('case_management.edit.title')}: {selectedCase?.caseNumber}
-          </h2>
-          <p className="text-black">{t('case_management.edit.subtitle')}</p>
-          <div className="space-y-4 mt-6">
-            <div className="grid grid-cols-2 gap-4">
-              <input
-                type="text"
-                placeholder={t('case_management.edit.name')}
-                className="px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-              <input
-                type="text"
-                placeholder={t('case_management.edit.status')}
-                className="px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-              <input
-                type="text"
-                placeholder={t('case_management.edit.assigned_to')}
-                className="px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-              <input
-                type="date"
-                className="px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-            </div>
-            <button className="w-full px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-xl transition-all duration-200 hover:shadow-lg">
-              {t('case_management.edit.save')}
-            </button>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 };

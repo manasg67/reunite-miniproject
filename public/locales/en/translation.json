@@ -377,5 +377,63 @@
       "view_details": "See more info",
       "no_reports": "You haven't filed any missing person reports yet"
     }
+  },
+
+  "poster": {
+    "status": "MISSING",
+    "missing_since": "Missing Since",
+    "details": {
+      "age": "Age",
+      "height": "Height",
+      "last_seen": "Last Seen",
+      "contact": "Contact"
+    },
+    "alert": "If you have any information about this person, please contact the authorities or the family immediately.",
+    "not_found": "Poster not found",
+    "help_tips": {
+      "title": "Help Tips",
+      "tips": [
+        "Share this poster on your social media accounts",
+        "Print and post in community spaces",
+        "Contact local authorities if you have any information",
+        "Keep checking back for updates"
+      ]
+    },
+    "share": {
+      "title": "Share Missing Person Poster",
+      "description": "Help spread the word about {name} by sharing this poster",
+      "download_png": "Download as PNG",
+      "download_pdf": "Download as PDF",
+      "generating_pdf": "Generating PDF...",
+      "share_others": "Share with Others",
+      "instagram": "Share on Instagram",
+      "instagram_instructions": "The image has been prepared. Please open Instagram and create a new post with this image.",
+      "sharing_error": "Error sharing the poster. Please try again.",
+      "posting": "Posting to Instagram...",
+      "instagram_success": "Successfully posted to Instagram!",
+      "instagram_error": "Error posting to Instagram. Please try again.",
+      "auth_error": "Please login to share on Instagram"
+    }
+  },
+
+  "nav": {
+    "search": {
+      "title": "Search",
+      "by_name": "Search by Name",
+      "by_aadhaar": "Search by Aadhaar",
+      "by_face": "Search by Face"
+    },
+    "map": "Missing Person Map",
+    "forum": "Public Forum",
+    "profile": "Profile",
+    "report": "Report Missing",
+    "my_complains": "My Reports",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register",
+    "admin": {
+      "dashboard": "Admin Dashboard",
+      "case_management": "Case Management"
+    }
   }
 }

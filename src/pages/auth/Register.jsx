@@ -131,7 +131,7 @@ const Register = () => {
     }
 
     try {
-      const response = await fetch('https://a943-2401-4900-57ef-65c5-3846-7218-fe1e-cecf.ngrok-free.app/api/accounts/users/register_with_aadhaar/', {
+      const response = await fetch('http://127.0.0.1:8000/api/accounts/users/register_with_aadhaar/', {
         method: 'POST',
         body: formData,
       });
