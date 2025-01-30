@@ -10,6 +10,7 @@ const Login = () => {
     password: ''
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -24,7 +25,7 @@ const Login = () => {
     setIsLoading(true)
 
     try {
-      const response = await fetch('https://a943-2401-4900-57ef-65c5-3846-7218-fe1e-cecf.ngrok-free.app/api/accounts/login/', {
+      const response = await fetch('http://127.0.0.1:8000/api/accounts/login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,14 +36,16 @@ const Login = () => {
       const data = await response.json()
 
       if (response.ok) {
-        localStorage.setItem('token', data.token)
-        alert(t('login.success'))
+        localStorage.setItem('accessToken', data.tokens.access)
+        localStorage.setItem('refreshToken', data.tokens.refresh)
+        localStorage.setItem('userData', JSON.stringify(data.user))
         navigate('/')
       } else {
         throw new Error(data.message || t('login.error'))
       }
     } catch (error) {
-      alert(error.message || t('login.error'))
+      console.error('Login error:', error)
+      setError(error.message || t('login.error'))
     } finally {
       setIsLoading(false)
     }
