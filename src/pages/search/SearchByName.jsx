@@ -5,39 +5,50 @@ import { Button } from "@/components/ui/button";
 import { Search, AlertCircle, Calendar, MapPin, User } from "lucide-react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useNavigate } from 'react-router-dom';
 
 const SearchByName = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSearch = async (e) => {
     e.preventDefault();
     setIsSearching(true);
+    setError('');
+    setSearchResults([]);
+
+    if (!searchQuery.trim()) {
+      setError(t('search.by_name.empty_query'));
+      setIsSearching(false);
+      return;
+    }
     
     try {
-      // Temporary mock data
-      setSearchResults([
-        {
-          id: 1,
-          name: "John Doe",
-          age: 25,
-          lastSeen: "2024-03-15",
-          location: "Mumbai",
-          image: "/api/placeholder/400/300"
-        },
-        {
-          id: 2,
-          name: "Jane Smith",
-          age: 30,
-          lastSeen: "2024-03-10",
-          location: "Delhi",
-          image: "/api/placeholder/400/300"
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await fetch(`http://127.0.0.1:8000/api/missing-persons/missing-persons/search/?query=${encodeURIComponent(searchQuery)}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Accept': 'application/json',
         }
-      ]);
+      });
+
+      if (!response.ok) {
+        throw new Error('Search failed');
+      }
+
+      const data = await response.json();
+      setSearchResults(data);
+      
+      if (data.length === 0) {
+        setError(t('search.no_results'));
+      }
     } catch (error) {
       console.error('Search error:', error);
+      setError(t('search.error'));
     } finally {
       setIsSearching(false);
     }
@@ -81,12 +92,31 @@ const SearchByName = () => {
                 disabled={isSearching}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 h-auto"
               >
-                <Search className="h-5 w-5 mr-2" />
-                {t('search.by_name.search_button')}
+                {isSearching ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <span>{t('search.searching')}</span>
+                  </div>
+                ) : (
+                  <>
+                    <Search className="h-5 w-5 mr-2" />
+                    {t('search.by_name.search_button')}
+                  </>
+                )}
               </Button>
             </form>
           </CardContent>
         </Card>
+
+        {/* Error Message */}
+        {error && (
+          <div className="mt-8">
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          </div>
+        )}
 
         {/* Results Section */}
         {searchResults.length > 0 && (
@@ -98,27 +128,32 @@ const SearchByName = () => {
               {searchResults.map((person) => (
                 <Card key={person.id} className="overflow-hidden hover:shadow-2xl transition-shadow duration-300">
                   <img
-                    src={person.image}
+                    src={person.recent_photo}
                     alt={person.name}
                     className="w-full h-56 object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '/fallback-image.jpg'; // Add a fallback image
+                    }}
                   />
                   <CardContent className="p-6">
                     <h3 className="font-bold text-xl mb-4 text-gray-900">{person.name}</h3>
                     <div className="space-y-3">
                       <div className="flex items-center text-gray-600">
                         <User className="h-4 w-4 mr-2" />
-                        <span>{t('search.results.age')}: {person.age}</span>
+                        <span>{t('search.results.age')}: {person.age_when_missing}</span>
                       </div>
                       <div className="flex items-center text-gray-600">
                         <Calendar className="h-4 w-4 mr-2" />
-                        <span>{t('search.results.last_seen')}: {person.lastSeen}</span>
+                        <span>{t('search.results.last_seen')}: {new Date(person.last_seen_date).toLocaleDateString()}</span>
                       </div>
                       <div className="flex items-center text-gray-600">
                         <MapPin className="h-4 w-4 mr-2" />
-                        <span>{t('search.results.location')}: {person.location}</span>
+                        <span>{t('search.results.location')}: {person.last_seen_location}</span>
                       </div>
                     </div>
                     <Button 
+                      onClick={() => navigate(`/missing-person/${person.id}`)}
                       variant="outline" 
                       className="mt-6 w-full border-blue-600 text-blue-600 hover:bg-blue-50"
                     >
@@ -128,14 +163,6 @@ const SearchByName = () => {
                 </Card>
               ))}
             </div>
-          </div>
-        )}
-
-        {searchQuery && !isSearching && searchResults.length === 0 && (
-          <div className="text-center py-16">
-            <p className="text-gray-600 text-lg">
-              {t('search.no_results')}
-            </p>
           </div>
         )}
       </div>
