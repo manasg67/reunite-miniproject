@@ -1,3 +1,4 @@
+import { Eye, EyeOff } from 'lucide-react'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -10,7 +11,7 @@ const Login = () => {
     password: ''
   })
   const [isLoading, setIsLoading] = useState(false)
-
+  const [showPassword, setShowPassword] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({
@@ -33,9 +34,10 @@ const Login = () => {
       })
 
       const data = await response.json()
-
+      console.log(data)
       if (response.ok) {
         localStorage.setItem('token', data.token)
+        localStorage.setItem('user', JSON.stringify(data.user))
         alert(t('login.success'))
         navigate('/')
       } else {
@@ -96,8 +98,10 @@ const Login = () => {
                       {t('login.forgot_password')}
                     </a>
                   </div>
+                  <div className="flex items-center">
+
                   <input 
-                    type="password" 
+                    type={showPassword ? "text" : "password"} 
                     name="password" 
                     id="password" 
                     value={formData.password}
@@ -106,6 +110,8 @@ const Login = () => {
                     className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" 
                     required
                   />
+                  <button type="button" className="text-sm text-gray-400 focus:text-blue-500 hover:text-blue-500 hover:underline" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff /> : <Eye />}</button>
+                  </div>
                 </div>
 
                 <div className="mt-6">

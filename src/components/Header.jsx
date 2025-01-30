@@ -6,10 +6,13 @@ import { LogOut, UserCircle2, Menu, X } from 'lucide-react';
 const Header = () => {
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem('accessToken');
+  const user = JSON.parse(localStorage.getItem('user'));
+  
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
     navigate('/');
   };
 
@@ -103,6 +106,18 @@ const Header = () => {
             <div className='px-2 py-2'><LanguageSwitcher /></div>
             <hr className='border-amber-900'/>
             <li className='px-2 py-2'><Link to='/report-missing' className="text-lg">Report</Link></li>
+            {user.role === 'admin' && (
+              <>
+                <hr className='border-amber-900'/>
+                <li className='px-2 py-2'><Link to='/admin' className="text-lg">Admin Dashboard</Link></li>
+                <hr className='border-amber-900'/>
+                <li className='px-2 py-2'><Link to='/case-management' className="text-lg">Case Management</Link></li>
+                
+              </>
+            )
+            }
+            <hr className='border-amber-900'/>
+            <li className='px-2 py-2'><Link to='/my-complains' className="text-lg">My Complains</Link></li>
           </ul>
         </div>
       </div>

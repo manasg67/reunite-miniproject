@@ -155,23 +155,23 @@ export default function PosterPDF({ person }) {
         <View style={styles.contentContainer}>
           <View style={styles.mainContent}>
             <View style={styles.imageContainer}>
-              <Image src={person.photo || "/placeholder.svg"} style={styles.personImage} />
+              <Image src={person.recent_photo || "/placeholder.svg"} style={styles.personImage} />
               <View style={styles.nameOverlay}>
                 <Text style={styles.name}>{person.name.toUpperCase()}</Text>
               </View>
             </View>
 
             <View style={styles.detailsSection}>
-              <Text style={styles.detailText}>Age: {person.age}</Text>
+              <Text style={styles.detailText}>Age: {person.name}</Text>
               <Text style={styles.detailText}>Height: {person.height}</Text>
               <Text style={styles.detailText}>Weight: {person.weight}</Text>
             </View>
 
             <View style={styles.blackBar}>
-              <Text style={styles.missingSinceText}>MISSING SINCE {person.missingSince}</Text>
+              <Text style={styles.missingSinceText}>MISSING SINCE {new Date(person.last_seen_date).toLocaleDateString()}</Text>
             </View>
 
-            <Text style={styles.lastSeenText}>{person.lastSeenWearing}</Text>
+            <Text style={styles.lastSeenText}>{person.last_seen_wearing}</Text>
           </View>
 
           {qrCode && (
@@ -186,7 +186,7 @@ export default function PosterPDF({ person }) {
 
         <View style={styles.footer}>
           <Text style={styles.pleaseHelp}>Please Help</Text>
-          <Text style={styles.contactNumber}>CALL: {person.contactNo}</Text>
+          <Text style={styles.contactNumber}>CALL: {person.emergency_contact_phone}</Text>
         </View>
       </Page>
     </Document>

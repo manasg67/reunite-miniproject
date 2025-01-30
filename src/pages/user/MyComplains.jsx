@@ -1,94 +1,132 @@
-"use client"
+import React, { useState, useEffect } from 'react';
+import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Calendar, MapPin, Phone, User, Clock } from 'lucide-react';
+import axios from 'axios';
 
-import React from "react"
-// import Link from "next/link"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Link } from "react-router-dom"
-import { useTranslation } from "react-i18next"
+const MissingPersonsPage = () => {
+  const [missingPersons, setMissingPersons] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-const missingPersons= [
-  {
-    id: "1",
-    name: "John Doe",
-    photo: "/images/missing-example.jpg",
-    contactNo: "123-456-7890",
-    age: "25",
-    height: "5'10\"",
-    weight: "160 lbs",
-    lastSeen: "2023-05-15",
-    missingSince: "2023-05-15",
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    photo: "/images/missing-example.jpg",
-    contactNo: "987-654-3210",
-    age: "25",
-    height: "5'10\"",
-    weight: "160 lbs",
-    lastSeen: "2023-05-20",
-    missingSince: "2023-05-15",
-  },
-]
+  useEffect(() => {
+    const fetchMissingPersons = async () => {
+      try {
+        // Get the token from wherever you store it (localStorage, context, etc.)
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwNzg4OTczLCJpYXQiOjE3MzgxOTY5NzMsImp0aSI6IjRmNzgxZWEyYzRjNzQ0ZTY4ZWE2MjFmNTg2NzM1ODdjIiwidXNlcl9pZCI6MjF9.xdrV7ddsJVk3-ukr7NBUR0zLCdKhgxC_TJpBfIzeN4M' // Adjust based on your token storage
+        
+        const response = await axios.get('https://a943-2401-4900-57ef-65c5-3846-7218-fe1e-cecf.ngrok-free.app/api/missing-persons/missing-persons/', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
 
-const MissingPersonCard = ({ person }) => {
-  const { t } = useTranslation();
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="bg-white rounded-lg shadow-md overflow-hidden"
-    >
-      <img src={person.photo || "/placeholder.svg"} alt={person.name} className="w-full h-48 object-cover" />
-      <div className="p-4">
-        <h3 className="text-xl font-semibold mb-2">{person.name}</h3>
-        <p className="text-gray-600 mb-1">
-          {t('my_complains.card.contact')}: {person.contactNo}
-        </p>
-        <p className="text-gray-600 mb-4">
-          {t('my_complains.card.last_seen')}: {person.lastSeen}
-        </p>
-        <Link to={`/create-poster/${person.id}`}>
-          <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-            {t('my_complains.card.view_details')}
-          </Button>
-        </Link>
+        console.log(response)
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch missing persons');
+        }
+
+        const data = await response.json();
+        setMissingPersons(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMissingPersons();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-lg">Loading...</p>
       </div>
-    </motion.div>
-  )
-}
+    );
+  }
 
-export default function MyReportsPage() {
-  const { t } = useTranslation();
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-red-500">Error: {error}</p>
+      </div>
+    );
+  }
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white py-12  px-4 sm:px-6 lg:px-8">
-        <div className="relative top-20">
-
-      <motion.h1
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-3xl font-bold text-center mb-8"
-      >
-        {t('my_complains.title')}
-      </motion.h1>
-      <div className="max-w-7xl relative mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {missingPersons.length > 0 ? (
-          missingPersons.map((person) => (
-            <MissingPersonCard key={person.id} person={person} />
-          ))
-        ) : (
-          <p className="text-center text-gray-600 col-span-full">
-            {t('my_complains.card.no_reports')}
-          </p>
-        )}
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-6">Missing Persons Reports</h1>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {missingPersons.map((person) => (
+          <Card key={person.case_number} className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex justify-between items-start">
+                <div>
+                  <h2 className="text-xl font-semibold">{person.name}</h2>
+                  <p className="text-sm text-gray-500">Case #{person.case_number}</p>
+                </div>
+                <div className="px-2 py-1 rounded bg-red-100 text-red-800 text-sm">
+                  {person.status}
+                </div>
+              </div>
+            </CardHeader>
+            
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <User className="w-4 h-4 text-gray-500" />
+                  <span>{person.age_when_missing} years old, {person.gender}</span>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-gray-500" />
+                  <span>{person.last_seen_location}</span>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-gray-500" />
+                  <span>Last seen: {formatDate(person.last_seen_date)}</span>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-gray-500" />
+                  <span>Emergency Contact: {person.emergency_contact_phone}</span>
+                </div>
+              </div>
+              
+              <div className="mt-4">
+                <h3 className="font-semibold mb-2">Last Seen Details:</h3>
+                <p className="text-sm text-gray-600">{person.last_seen_details}</p>
+              </div>
+            </CardContent>
+            
+            <CardFooter className="flex justify-end gap-4">
+              <Button variant="outline">Contact</Button>
+              <Button onClick={() => navigate(`/create-poster/${person.id}`)}>View Details</Button>
+            </CardFooter>
+          </Card>
+        ))}
       </div>
+      
+      {missingPersons.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-gray-500 text-lg">No missing person reports found.</p>
         </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
+export default MissingPersonsPage;

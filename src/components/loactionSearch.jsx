@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -28,8 +26,10 @@ const SearchableLocationInput = ({ onLocationSelect }) => {
         const data = await response.json()
         setLocations(
           data.map((item) => ({
-            value: `${item.lat},${item.lon}`,
-            label: item.display_name,
+            coordinates: `${item.lon},${item.lat}`,
+            displayName: item.display_name,
+            latitude: item.lat,
+            longitude: item.lon
           })),
         )
       } catch (error) {
@@ -41,13 +41,11 @@ const SearchableLocationInput = ({ onLocationSelect }) => {
     fetchLocations()
   }, [searchQuery])
 
-  console.log(locations)
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
-          {value ? locations.find((location) => location.value === value)?.label : "Search for a location..."}
+        <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between truncate">
+          {value || "Search for a location..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -59,15 +57,20 @@ const SearchableLocationInput = ({ onLocationSelect }) => {
             <CommandGroup>
               {locations.map((location) => (
                 <CommandItem
-                  key={location.value}
+                  key={location.displayName}
                   onSelect={() => {
-                    setValue(location.value)
-                    onLocationSelect(location.value)
+                    setValue(location.displayName)
+                    onLocationSelect({
+                      displayName: location.displayName,
+                      coordinates: location.coordinates,
+                      latitude: location.latitude,
+                      longitude: location.longitude
+                    })
                     setOpen(false)
                   }}
                 >
-                  <Check className={cn("mr-2 h-4 w-4", value === location.value ? "opacity-100" : "opacity-0")} />
-                  {location.label}
+                  <Check className={cn("mr-2 h-4 w-4", value === location.displayName ? "opacity-100" : "opacity-0")} />
+                  {location.displayName}
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -79,4 +82,3 @@ const SearchableLocationInput = ({ onLocationSelect }) => {
 }
 
 export default SearchableLocationInput
-
