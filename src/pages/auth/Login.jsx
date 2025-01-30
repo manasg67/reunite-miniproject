@@ -36,12 +36,18 @@ const Login = () => {
       const data = await response.json()
 
       if (response.ok) {
-        localStorage.setItem('accessToken', data.tokens.access)
-        localStorage.setItem('refreshToken', data.tokens.refresh)
-        localStorage.setItem('userData', JSON.stringify(data.user))
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('user_id', data.user.id)
+        localStorage.setItem('username', data.user.username)
+        localStorage.setItem('email', data.user.email)
+        localStorage.setItem('first_name', data.user.first_name)
+        localStorage.setItem('last_name', data.user.last_name)
+        
+        alert(t('login.success'))
         navigate('/')
       } else {
-        throw new Error(data.message || t('login.error'))
+        const errorMessage = data.detail || data.message || t('login.error')
+        throw new Error(errorMessage)
       }
     } catch (error) {
       console.error('Login error:', error)
