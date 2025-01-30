@@ -15,7 +15,13 @@
     "forgot_password": "Forgot password?",
     "signin_button": "Sign in",
     "no_account": "Don't have an account yet?",
-    "sign_up": "Sign up"
+    "sign_up": "Sign up",
+    "signing_in": "Signing in...",
+    "success": "Successfully logged in!",
+    "error": "Failed to login. Please try again.",
+    "username": "User ID",
+    "username_placeholder": "Enter your user ID",
+    "password_placeholder": "Enter your password"
   },
 
   "register": {
@@ -305,6 +311,15 @@
       "toggle": "Family Member",
       "select": "Select Family Member"
     },
+    "subtitle": "Please provide accurate information to help locate the missing person",
+    "form_title": "Missing Person Details",
+    "form_description": "Fill in all required information about the missing person",
+    "sections": {
+      "personal_info": "Personal Information",
+      "physical_details": "Physical Details",
+      "documents": "Required Documents",
+      "missing_details": "Missing Person Details"
+    },
     "form": {
       "name": "Name",
       "surname": "Surname",
@@ -324,7 +339,12 @@
       "dob": "Date of Birth",
       "documents": {
         "aadhaar": "Aadhaar Photo",
-        "person": "Missing Person's Photo"
+        "person": "Missing Person's Photo",
+        "upload_prompt": "Click or drag and drop to upload"
+      },
+      "physical_details": {
+        "height_placeholder": "Enter height in cm",
+        "weight_placeholder": "Enter weight in kg"
       },
       "missing_details": {
         "date": "Missing Date",
