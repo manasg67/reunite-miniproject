@@ -27,7 +27,7 @@ const Login = () => {
     setIsLoading(true)
 
     try {
-      const response = await fetch('http://192.168.0.101:8000/api/accounts/login/', {
+      const response = await fetch('http://127.0.0.1:8000/api/accounts/login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,15 +38,17 @@ const Login = () => {
       const data = await response.json()
       console.log(data)
       if (response.ok) {
-        localStorage.setItem('token', data.token)
+        localStorage.setItem('accessToken', data.tokens.access)
+        localStorage.setItem('refreshToken', data.tokens.refresh)
         localStorage.setItem('user_id', data.user.id)
         localStorage.setItem('username', data.user.username)
         localStorage.setItem('email', data.user.email)
         localStorage.setItem('first_name', data.user.first_name)
         localStorage.setItem('last_name', data.user.last_name)
+        localStorage.setItem('role', data.user.role || 'USER')
         
         alert(t('login.success'))
-        navigate('/')
+        window.location.href = '/'
       } else {
         const errorMessage = data.detail || data.message || t('login.error')
         throw new Error(errorMessage)

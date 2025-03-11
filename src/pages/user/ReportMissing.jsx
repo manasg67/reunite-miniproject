@@ -15,8 +15,6 @@ import SearchableLocationInput from "@/components/loactionSearch"
 import { Checkbox } from "@/components/ui/checkbox"
 import { LoadingOverlay } from "@/components/ui/loading-overlay"
 
-const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwNzg4OTczLCJpYXQiOjE3MzgxOTY5NzMsImp0aSI6IjRmNzgxZWEyYzRjNzQ0ZTY4ZWE2MjFmNTg2NzM1ODdjIiwidXNlcl9pZCI6MjF9.xdrV7ddsJVk3-ukr7NBUR0zLCdKhgxC_TJpBfIzeN4M'
-
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
 const genders = ["M", "F", "Other"]
 const complexions = ["Fair", "Medium", "Dark"]
@@ -138,6 +136,12 @@ const ReportMissing = () => {
       setIsSubmitting(true);
       setSubmitStatus(t('report_missing.status.preparing'));
 
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        navigate('/login');
+        return;
+      }
+
       const formData = new FormData();
 
       // Handle possible_locations array
@@ -168,7 +172,7 @@ const ReportMissing = () => {
       });
 
       setSubmitStatus(t('report_missing.status.submitting'));
-      const response = await fetch("http://192.168.0.101:8000/api/missing-persons/missing-persons/", {
+      const response = await fetch("http://127.0.0.1:8000/api/missing-persons/missing-persons/", {
         method: "POST",
         body: formData,
         headers: {
@@ -197,6 +201,12 @@ const ReportMissing = () => {
       
       setIsLoadingFamilyMembers(true);
       try {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+          navigate('/login');
+          return;
+        }
+
         const response = await fetch(`${base_url}/api/accounts/families/${family_Id}/members/`, {
           headers: {
             "Authorization": `Bearer ${accessToken}`
@@ -215,7 +225,7 @@ const ReportMissing = () => {
     };
 
     fetchFamilyMembers();
-  }, [isFamilyMember]);
+  }, [isFamilyMember, navigate]);
 
   const handleFamilyMemberSelect = (memberId) => {
     const member = familyMembers.find(m => m.id === memberId);

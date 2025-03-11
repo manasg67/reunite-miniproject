@@ -109,7 +109,7 @@ const AdminDashboard = () => {
       }
 
       try {
-        const response = await fetch('http://192.168.0.101:8000/api/missing-persons/missing-persons/search/', {
+        const response = await fetch('http://127.0.0.1:8000/api/missing-persons/missing-persons/search/', {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Accept': 'application/json',

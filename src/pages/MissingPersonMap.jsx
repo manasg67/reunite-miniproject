@@ -78,7 +78,7 @@ const MissingPersonsMap = () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
       const response = await fetch(
-        `http://192.168.0.101:8000/api/missing-persons/missing-persons/nearby/?latitude=${latitude}&longitude=${longitude}&radius=${radius}`,
+        `http://127.0.0.1:8000/api/missing-persons/missing-persons/nearby/?latitude=${latitude}&longitude=${longitude}&radius=${radius}`,
         {
           headers: {
             'Authorization': `Bearer ${accessToken}`,

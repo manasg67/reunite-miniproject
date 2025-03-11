@@ -14,11 +14,14 @@ const MissingPersonsPage = () => {
   useEffect(() => {
     const fetchMissingPersons = async () => {
       try {
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0MjgzODg1LCJpYXQiOjE3NDE2OTE4ODUsImp0aSI6ImE2MTg1MjE3NmI1MjQ5MDI4NTYxY2JlNWE1NmY2MGQ0IiwidXNlcl9pZCI6MjF9.BjYrcF5YjBZT8jwY9-lMDonA3kphn80zGqvtGpS2fLo';
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+          throw new Error('No access token found');
+        }
         
-        const response = await axios.get('http://192.168.0.101:8000/api/missing-persons/missing-persons/', {
+        const response = await axios.get('http://127.0.0.1:8000/api/missing-persons/missing-persons/', {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/json'
           }
         });
@@ -26,13 +29,16 @@ const MissingPersonsPage = () => {
         setMissingPersons(response.data);
       } catch (err) {
         setError(err.message);
+        if (err.message === 'No access token found') {
+          navigate('/login');
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchMissingPersons();
-  }, []);
+  }, [navigate]);
 
   if (loading) {
     return (

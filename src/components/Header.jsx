@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import LanguageSwitcher from './LanguageSwitcher';
 import { LogOut, UserCircle2, Menu, X, Search, Map, MessageSquare, FileText, Settings } from 'lucide-react';
@@ -8,8 +8,26 @@ const Header = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
-  const isAuthenticated = !!localStorage.getItem('accessToken');
-  const userRole = localStorage.getItem('role');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    // Check authentication status whenever component mounts or location changes
+    const checkAuth = () => {
+      const accessToken = localStorage.getItem('accessToken');
+      const role = localStorage.getItem('role');
+      setIsAuthenticated(!!accessToken);
+      setUserRole(role);
+    };
+
+    checkAuth();
+    // Add event listener for storage changes
+    window.addEventListener('storage', checkAuth);
+    
+    return () => {
+      window.removeEventListener('storage', checkAuth);
+    };
+  }, [location]); // Re-run when location changes
 
   const searchRoutes = [
     { path: '/search/by-name', icon: 'text', label: t('nav.search.by_name') },
@@ -23,8 +41,22 @@ const Header = () => {
   ];
 
   const handleLogout = () => {
-    localStorage.clear();
-    navigate('/');
+    // Clear all authentication related data from localStorage
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('username');
+    localStorage.removeItem('email');
+    localStorage.removeItem('first_name');
+    localStorage.removeItem('last_name');
+    localStorage.removeItem('role');
+    
+    // Update authentication state
+    setIsAuthenticated(false);
+    setUserRole(null);
+    
+    // Force a full page reload to clear any cached state
+    window.location.href = '/';
   };
 
   const isAdmin = userRole === 'ADMIN' || userRole === 'LAW_ENFORCEMENT';
