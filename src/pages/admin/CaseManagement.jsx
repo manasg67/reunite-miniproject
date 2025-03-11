@@ -24,7 +24,7 @@ const CaseManagement = () => {
       }
 
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/missing-persons/missing-persons/search/', {
+        const response = await fetch('http://192.168.0.101:8000/api/missing-persons/missing-persons/search/', {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Accept': 'application/json',
@@ -97,7 +97,7 @@ const CaseManagement = () => {
     const accessToken = localStorage.getItem('accessToken');
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/missing-persons/missing-persons/${id}/update_status/`, {
+      const response = await fetch(`http://192.168.0.101:8000/api/missing-persons/missing-persons/${id}/update_status/`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${accessToken}`,

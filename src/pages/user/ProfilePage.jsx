@@ -33,7 +33,7 @@ const Profile = () => {
     }
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/accounts/families/${familyId}/members/`, {
+      const response = await fetch(`http://192.168.0.101:8000/api/accounts/families/${familyId}/members/`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'Accept': 'application/json',
@@ -65,7 +65,7 @@ const Profile = () => {
       }
 
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/accounts/users/me/', {
+        const response = await fetch('http://192.168.0.101:8000/api/accounts/users/me/', {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Accept': 'application/json',
@@ -142,7 +142,7 @@ const Profile = () => {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/accounts/families/', {
+      const response = await fetch('http://192.168.0.101:8000/api/accounts/families/', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -184,7 +184,7 @@ const Profile = () => {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/accounts/families/join/', {
+      const response = await fetch('http://192.168.0.101:8000/api/accounts/families/join/', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -237,7 +237,7 @@ const Profile = () => {
           <li key={member.id} className="flex flex-col justify-between items-center bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow">
             {member.user.profile_picture ? (
               <img 
-                src={`http://127.0.0.1:8000${member.user.profile_picture}`}
+                src={`http://192.168.0.101:8000${member.user.profile_picture}`}
                 alt={`${member.user.first_name}'s profile`}
                 className="w-24 h-24 rounded-full object-cover mb-3" 
               />
@@ -275,7 +275,7 @@ const Profile = () => {
           <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
             {user.profile_picture ? (
               <img 
-                src={`http://127.0.0.1:8000${user.profile_picture}`} 
+                src={`http://192.168.0.101:8000${user.profile_picture}`} 
                 alt="Profile" 
                 className="w-32 h-32 rounded-full object-cover border border-gray-200"
                 onError={(e) => {

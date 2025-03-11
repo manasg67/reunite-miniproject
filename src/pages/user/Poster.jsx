@@ -9,6 +9,7 @@ import html2canvas from 'html2canvas';
 import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
 import PosterPDF from "@/components/PosterPDF";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
+import axios from 'axios';
 
 // Add this array as a fallback
 const defaultTips = [
@@ -59,10 +60,14 @@ export default function CreatePosterPage() {
   useEffect(() => {
     const fetchPerson = async () => {
       try {
-        const response = await fetch(`/api/missing-persons/missing-persons/${id}`);
-        if (!response.ok) throw new Error('Failed to fetch person data');
-        const data = await response.json();
-        setPerson(data);
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0MjgzODg1LCJpYXQiOjE3NDE2OTE4ODUsImp0aSI6ImE2MTg1MjE3NmI1MjQ5MDI4NTYxY2JlNWE1NmY2MGQ0IiwidXNlcl9pZCI6MjF9.BjYrcF5YjBZT8jwY9-lMDonA3kphn80zGqvtGpS2fLo';
+        const response = await axios.get(`http://192.168.0.101:8000/api/missing-persons/missing-persons/${id}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        setPerson(response.data);
       } catch (error) {
         console.error('Error fetching person:', error);
         // Fallback to static data if API fails
@@ -86,7 +91,7 @@ export default function CreatePosterPage() {
       setIsConverting(true);
       setUploadStatus(t('poster.share.preparing'));
       
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwNzM2NDYyLCJpYXQiOjE3MzgxNDQ0NjIsImp0aSI6Ijg4MzQxYzgxM2Q1ZjQwNDNiMjk5NTc4ZjRlOWUwM2VjIiwidXNlcl9pZCI6MjF9.UtaULwm3-WQY1x3mthqXGudLOXG6CUyzVyEoAKP2zZI";
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0MjgzODg1LCJpYXQiOjE3NDE2OTE4ODUsImp0aSI6ImE2MTg1MjE3NmI1MjQ5MDI4NTYxY2JlNWE1NmY2MGQ0IiwidXNlcl9pZCI6MjF9.BjYrcF5YjBZT8jwY9-lMDonA3kphn80zGqvtGpS2fLo';
       
       // Generate PDF blob
       setUploadStatus(t('poster.share.generating_pdf'));
@@ -100,7 +105,7 @@ export default function CreatePosterPage() {
       formData.append('caption', `Missing Person Alert: ${person.name}\nLast seen: ${person.lastSeen}\nContact: ${person.contactNo}`);
 
       const response = await fetch(
-        'https://a943-2401-4900-57ef-65c5-3846-7218-fe1e-cecf.ngrok-free.app/api/missing-persons/missing-persons/convert-and-post/',
+        'http://192.168.0.101:8000/api/missing-persons/missing-persons/convert-and-post/',
         {
           method: 'POST',
           headers: {

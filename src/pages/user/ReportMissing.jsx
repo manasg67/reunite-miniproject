@@ -168,7 +168,7 @@ const ReportMissing = () => {
       });
 
       setSubmitStatus(t('report_missing.status.submitting'));
-      const response = await fetch("http://127.0.0.1:8000/api/missing-persons/missing-persons/", {
+      const response = await fetch("http://192.168.0.101:8000/api/missing-persons/missing-persons/", {
         method: "POST",
         body: formData,
         headers: {

@@ -15,8 +15,6 @@ import SearchByFace from "./pages/search/SearchByFace";
 
 import PublicForum from './pages/PublicForum';
 import ReportMissing from './pages/user/ReportMissing';
-import MissingPersonsMap from './pages/MissingPersonMap';
-// import MissingPersonMap from './pages/MissingPersonMap';
 
 const AppRoutes = () => (
   // <Router>
@@ -26,7 +24,7 @@ const AppRoutes = () => (
       <Route path="/register" element={<Register />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/missing-person/:id" element={<MissingPersonDetails />} />
+      <Route path="/missing-person" element={<MissingPersonDetails />} />
       <Route path="/case-management" element={<CaseManagement />} />
       <Route path="/my-complains" element={<MyComplains />} />
       <Route path="/create-poster/:id" element={<Poster />} />
@@ -34,8 +32,8 @@ const AppRoutes = () => (
       <Route path="/search/by-name" element={<SearchByName />} />
       <Route path="/search/by-aadhaar" element={<SearchByAadhaar />} />
       <Route path="/search/by-face" element={<SearchByFace />} />
+=======
       <Route path="/report-missing" element={<ReportMissing />} />
-      <Route path="/missing-person-map" element={<MissingPersonsMap />} />
     </Routes>
   // </Router>
 );

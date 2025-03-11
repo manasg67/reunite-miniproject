@@ -210,7 +210,7 @@ const MissingPersonDetails = () => {
       }
 
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/missing-persons/missing-persons/${id}/`, {
+        const response = await fetch(`http://192.168.0.101:8000/api/missing-persons/missing-persons/${id}/`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Accept': 'application/json',

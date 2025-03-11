@@ -3,8 +3,10 @@ import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button';
 import { Calendar, MapPin, Phone, User, Clock } from 'lucide-react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const MissingPersonsPage = () => {
+  const navigate = useNavigate();
   const [missingPersons, setMissingPersons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,24 +14,16 @@ const MissingPersonsPage = () => {
   useEffect(() => {
     const fetchMissingPersons = async () => {
       try {
-        // Get the token from wherever you store it (localStorage, context, etc.)
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwNzg4OTczLCJpYXQiOjE3MzgxOTY5NzMsImp0aSI6IjRmNzgxZWEyYzRjNzQ0ZTY4ZWE2MjFmNTg2NzM1ODdjIiwidXNlcl9pZCI6MjF9.xdrV7ddsJVk3-ukr7NBUR0zLCdKhgxC_TJpBfIzeN4M' // Adjust based on your token storage
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0MjgzODg1LCJpYXQiOjE3NDE2OTE4ODUsImp0aSI6ImE2MTg1MjE3NmI1MjQ5MDI4NTYxY2JlNWE1NmY2MGQ0IiwidXNlcl9pZCI6MjF9.BjYrcF5YjBZT8jwY9-lMDonA3kphn80zGqvtGpS2fLo';
         
-        const response = await axios.get('https://a943-2401-4900-57ef-65c5-3846-7218-fe1e-cecf.ngrok-free.app/api/missing-persons/missing-persons/', {
+        const response = await axios.get('http://192.168.0.101:8000/api/missing-persons/missing-persons/', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
 
-        console.log(response)
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch missing persons');
-        }
-
-        const data = await response.json();
-        setMissingPersons(data);
+        setMissingPersons(response.data);
       } catch (err) {
         setError(err.message);
       } finally {
